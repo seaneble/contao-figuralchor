@@ -2,6 +2,10 @@ services:
   _defaults:
     autowire: true
     autoconfigure: true
+    public: false
 
   Figuralchor\ContaoBundle\:
     resource: ../src/
+    exclude:
+      - ../src/ContaoBundle.php
+      - ../src/ContaoManager/
