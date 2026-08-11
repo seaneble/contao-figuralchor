@@ -6,11 +6,11 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 
-class ContaoBundle extends AbstractBundle
+class FiguralchorBundle extends AbstractBundle
 {
     public function loadExtension(
-        array $config, 
-        ContainerConfigurator $containerConfigurator, 
+        array $config,
+        ContainerConfigurator $containerConfigurator,
         ContainerBuilder $containerBuilder,
     ): void
     {

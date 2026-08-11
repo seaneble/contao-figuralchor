@@ -7,5 +7,5 @@ services:
   Figuralchor\ContaoBundle\:
     resource: ../src/
     exclude:
-      - ../src/ContaoBundle.php
+      - ../src/FiguralchorBundle.php
       - ../src/ContaoManager/
