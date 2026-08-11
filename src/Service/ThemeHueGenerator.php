@@ -6,6 +6,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class ThemeHueGenerator
 {
+    private const SESSION_KEY = 'figuralchor_theme_hue';
+
     public function __construct(
         private readonly RequestStack $requestStack,
     ) {
@@ -19,8 +21,12 @@ class ThemeHueGenerator
             return 180;
         }
 
-        $sessionId = $request->getSession()->getId();
+        $session = $request->getSession();
 
-        return abs(crc32($sessionId)) % 360;
+        if (!$session->has(self::SESSION_KEY)) {
+            $session->set(self::SESSION_KEY, random_int(0, 359));
+        }
+
+        return $session->get(self::SESSION_KEY);
     }
 }
