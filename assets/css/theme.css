@@ -1,0 +1,38 @@
+/*
+ * Per-session accent color. --theme-hue is set automatically in the page
+ * <head> by the bundle's template overrides (contao/templates/fe_page.html.twig
+ * and contao/templates/page/layout.html.twig) via the figuralchor_theme_hue()
+ * Twig function. The value below is only a fallback for templates that don't
+ * go through those overrides.
+ */
+:root {
+    --theme-hue: 210;
+}
+
+a,
+.ce_text a {
+    color: hsl(var(--theme-hue), 65%, 40%);
+}
+
+a:hover,
+.ce_text a:hover {
+    color: hsl(var(--theme-hue), 65%, 30%);
+}
+
+button,
+.button,
+input[type="submit"] {
+    background-color: hsl(var(--theme-hue), 55%, 45%);
+    border-color: hsl(var(--theme-hue), 55%, 45%);
+}
+
+button:hover,
+.button:hover,
+input[type="submit"]:hover {
+    background-color: hsl(var(--theme-hue), 55%, 35%);
+}
+
+.accent,
+.highlight {
+    color: hsl(var(--theme-hue), 60%, 45%);
+}
