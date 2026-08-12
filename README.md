@@ -52,6 +52,23 @@ generated until the session actually starts). Two ways to use it:
 elements — adjust selectors to match real site markup as design work
 progresses.
 
+## Design tokens: Open Props
+
+`assets/css/vendor/open-props.min.css` is a vendored, version-pinned copy of
+[Open Props](https://open-props.style) (currently 1.7.23) — a zero-build set
+of CSS custom properties for spacing, type scale, color, shadows, easing,
+etc. It defines tokens only (no CSS rules), so it can't conflict with
+anything; `theme.css` and future component styles should build on its
+`--size-*`, `--font-size-*`, and similar variables instead of hand-rolling
+scales. To update, re-fetch a newer pinned version from
+`https://cdn.jsdelivr.net/npm/open-props@<version>/open-props.min.css` and
+replace the file — don't point at `@latest`, so deploys stay reproducible.
+
+It's deployed into `files/theme/open-props.min.css` alongside `theme.css`
+and needs to be selected in the backend's "external style sheets" picker
+**before** `theme.css` in load order (Open Props only defines variables,
+but keeping tokens-before-usage is the correct convention).
+
 ## Deploying
 
 From the server (`ssh figuralchor-stuttgart.de`), run:
@@ -60,7 +77,8 @@ From the server (`ssh figuralchor-stuttgart.de`), run:
 ~/dev/contao-figuralchor/bin/deploy.sh
 ```
 
-This pulls the latest commit, syncs `assets/css/theme.css` into the live
-`files/theme/`, runs `composer update` for this package, syncs the file
-index, clears cache, checks for pending migrations, and does a health check
-against `test.figuralchor-stuttgart.de`.
+This pulls the latest commit, syncs `assets/css/theme.css` and
+`assets/css/vendor/open-props.min.css` into the live `files/theme/`, runs
+`composer update` for this package, syncs the file index, clears cache,
+checks for pending migrations, and does a health check against
+`test.figuralchor-stuttgart.de`.

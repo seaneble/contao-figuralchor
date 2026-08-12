@@ -1,4 +1,7 @@
 /*
+ * Assumes vendor/open-props.min.css is loaded first (see README) for the
+ * --size-*, --font-size-* etc. design tokens future rules here should use.
+ *
  * Per-session accent color. --theme-hue is set automatically in the page
  * <head> by the bundle's template overrides (contao/templates/fe_page.html.twig
  * and contao/templates/page/layout.html.twig) via the figuralchor_theme_hue()

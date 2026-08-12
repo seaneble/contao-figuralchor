@@ -15,6 +15,7 @@ git pull origin master
 
 echo "==> Syncing theme CSS into files/theme/"
 cp "$BUNDLE_DIR/assets/css/theme.css" "$WEBSITE_DIR/files/theme/theme.css"
+cp "$BUNDLE_DIR/assets/css/vendor/open-props.min.css" "$WEBSITE_DIR/files/theme/open-props.min.css"
 
 cd "$WEBSITE_DIR"
 
