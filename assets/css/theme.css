@@ -354,11 +354,30 @@ a.invisible:focus {
     }
 }
 
-/* Footer legal nav: always a simple inline/wrapping row, no toggle */
+/*
+ * Footer legal nav: mod_customnav's own template just extends
+ * mod_navigation.html.twig with no overrides, so it inherits the same
+ * details/summary toggle markup - unwanted here. Neutralize it
+ * unconditionally (not just above the nav breakpoint) so the footer is
+ * always a simple wrapping row of links.
+ */
+#footer .nav-toggle__button {
+    display: none;
+}
+
+#footer .nav-toggle {
+    position: static;
+}
+
 #footer nav.mod_customnav ul.level_1 {
+    position: static;
     display: flex;
     flex-wrap: wrap;
     gap: var(--size-2) var(--size-5);
+    background: none;
+    border: 0;
+    box-shadow: none;
+    padding: 0;
 }
 
 #footer nav.mod_customnav a {
