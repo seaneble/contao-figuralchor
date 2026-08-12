@@ -1,8 +1,9 @@
 /*
  * Figuralchor theme.
  * Assumes vendor/open-props.min.css loads first (see README) for the base
- * --size-*, --font-size-*, --font-weight-*, --radius-*, --shadow-* tokens
- * used throughout.
+ * --size-*, --font-size-*, --font-weight-*, --shadow-* tokens used
+ * throughout (deliberately not using --radius-* - see "Shape language"
+ * below, this design uses angled cuts instead of rounded corners).
  *
  * Color system: every session gets a random --theme-hue (0-359, set in the
  * page <head> by the bundle's template overrides). All color roles below
@@ -15,6 +16,14 @@
  * gets gamut-clipped (slightly desaturated) for roughly a third of hues
  * (blues/greens at this lightness exceed sRGB) - that's expected and does
  * not affect contrast, since browsers preserve lightness when gamut-mapping.
+ *
+ * Breakpoints: two distinct ones, used deliberately for different reasons.
+ * --bp-nav (48rem/768px, "not a phone") controls when the nav shows as a
+ * flat bar instead of the mobile toggle - there's room for it well before
+ * desktop widths. --bp-wide (64rem/1024px) controls the (currently unused)
+ * sidebar columns, which genuinely need more horizontal room. Media queries
+ * can't reference custom properties in the condition itself, so the values
+ * are repeated literally at each usage - keep them in sync if changed.
  */
 
 :root {
@@ -32,6 +41,7 @@
 
     --font-body: "Helvetica Neue", Helvetica, var(--font-sans);
     --content-max-width: 72rem;
+    --cut: var(--size-6); /* corner/edge cut size, used throughout */
 }
 
 /* ---------- Reset & base ---------- */
@@ -84,7 +94,6 @@ a:hover {
 :focus-visible {
     outline: 3px solid var(--color-focus);
     outline-offset: 2px;
-    border-radius: var(--radius-1);
 }
 
 /* ---------- Accessibility utilities ---------- */
@@ -121,7 +130,6 @@ a.invisible:focus {
     white-space: normal;
     background: var(--color-accent);
     color: var(--color-accent-contrast);
-    border-radius: var(--radius-2);
 }
 
 /*
@@ -145,14 +153,45 @@ a.invisible:focus {
 
 #header,
 #footer {
-    background: var(--color-surface);
-    border-block-end: 1px solid var(--color-border);
+    position: relative;
+}
+
+#header {
+    background: var(--color-accent);
+    color: var(--color-accent-contrast);
+    padding-block-end: var(--cut);
+}
+
+/* Diagonal "cut" edge below the header, in the page background color -
+   see the "Shape language" note above. A separate overlay rather than
+   clip-path on #header itself, so the header's own box stays a normal
+   rectangle for layout purposes and nothing needs compensating margins. */
+#header::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    height: var(--cut);
+    background: var(--color-bg);
+    clip-path: polygon(0 100%, 100% 0, 100% 100%);
 }
 
 #footer {
-    border-block-end: 0;
+    background: var(--color-surface);
     border-block-start: 1px solid var(--color-border);
     margin-block-start: auto;
+}
+
+/* Small angled accent detail at the top of the footer, echoing the header's
+   cut without competing with it - the footer stays visually quiet/minimal. */
+#footer::before {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    top: -1px;
+    height: var(--size-2);
+    background: var(--color-accent);
+    clip-path: polygon(0 0, 40% 0, 30% 100%, 0 100%);
 }
 
 #header .inside,
@@ -188,8 +227,8 @@ a.invisible:focus {
 
 /* Sidebars fold below the main content by default on narrow screens (they
    simply follow document order: main, then left, then right). On wide
-   screens, they sit alongside main - only if a Layout actually has left
-   and/or right column modules configured. */
+   screens (--bp-wide, 64rem), they sit alongside main - only if a Layout
+   actually has left and/or right column modules configured. */
 @media (min-width: 64rem) {
     #container:has(#left):has(#right) {
         grid-template-columns: 16rem minmax(0, 1fr) 16rem;
@@ -232,11 +271,16 @@ a.invisible:focus {
 /* ---------- Navigation ---------- */
 
 #header nav.mod_navigation {
-    position: relative;
+    /* Fixed sizing, independent of the details' open/closed content, so
+       opening the menu can never shift the toggle button or reflow the
+       header layout. */
+    flex: none;
+    color: var(--color-accent-contrast);
 }
 
 .nav-toggle {
     position: relative;
+    width: max-content;
 }
 
 .nav-toggle > summary.nav-toggle__button {
@@ -247,7 +291,6 @@ a.invisible:focus {
     height: var(--size-8);
     cursor: pointer;
     list-style: none;
-    border-radius: var(--radius-2);
 }
 
 .nav-toggle__button::-webkit-details-marker {
@@ -269,7 +312,7 @@ a.invisible:focus {
 
 .nav-toggle:focus-within > summary.nav-toggle__button,
 .nav-toggle > summary.nav-toggle__button:hover {
-    background: var(--color-border);
+    background: color-mix(in oklch, var(--color-accent-contrast) 20%, transparent);
 }
 
 .nav-toggle > ul.level_1 {
@@ -278,9 +321,7 @@ a.invisible:focus {
     top: calc(100% + var(--size-2));
     min-width: 14rem;
     background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-3);
-    box-shadow: var(--shadow-3);
+    border-inline-start: 4px solid var(--color-accent);
     padding: var(--size-3);
     display: flex;
     flex-direction: column;
@@ -300,16 +341,45 @@ a.invisible:focus {
 .mod_customnav a {
     display: inline-block;
     padding-block: var(--size-1);
-    color: var(--color-text);
+    color: inherit;
     text-decoration: none;
 }
 
+/* Inside the mobile/dropdown panels the text sits on --color-surface again,
+   not the accent header background, so it needs the regular text color. */
+.nav-toggle > ul.level_1 a,
+.nav-toggle > ul.level_1 strong,
+.level_1 > li.submenu > .level_2 a {
+    color: var(--color-text);
+}
+
 .mod_navigation strong[aria-current="page"] {
-    color: var(--color-accent);
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
     font-weight: var(--font-weight-7);
 }
 
-@media (min-width: 64rem) {
+/* --color-focus is similar lightness to --color-accent, so the default
+   focus ring would barely show up against the header's accent background -
+   use the light contrast color there instead. Scoped precisely to what
+   actually sits on that background (logo link, toggle button, and - once
+   the flat bar layout kicks in - the top-level links); the dropdown
+   panels and submenus sit on the light --color-surface regardless of
+   breakpoint and need the regular dark ring. */
+#header .site-branding a:focus-visible,
+#header .nav-toggle > summary:focus-visible {
+    outline-color: var(--color-accent-contrast);
+}
+
+@media (min-width: 48rem) {
+    #header .nav-toggle > ul.level_1 > li > a:focus-visible,
+    #header .nav-toggle > ul.level_1 > li > strong:focus-visible {
+        outline-color: var(--color-accent-contrast);
+    }
+}
+
+/* --bp-nav: 48rem - see file header note on the two breakpoints */
+@media (min-width: 48rem) {
     .nav-toggle__button {
         display: none;
     }
@@ -325,9 +395,15 @@ a.invisible:focus {
         align-items: center;
         background: none;
         border: 0;
-        box-shadow: none;
         padding: 0;
         gap: var(--size-5);
+    }
+
+    /* Direct children only - nested .level_2 submenu links must stay dark,
+       they float on --color-surface even at this breakpoint. */
+    .nav-toggle > ul.level_1 > li > a,
+    .nav-toggle > ul.level_1 > li > strong {
+        color: inherit;
     }
 
     .level_1 > li.submenu {
@@ -341,11 +417,13 @@ a.invisible:focus {
         inset-inline-start: 0;
         min-width: 12rem;
         background: var(--color-surface);
-        border: 1px solid var(--color-border);
-        border-radius: var(--radius-3);
-        box-shadow: var(--shadow-3);
+        border-block-start: 4px solid var(--color-accent);
         padding: var(--size-2);
         z-index: 30;
+    }
+
+    .level_1 > li.submenu > .level_2 a {
+        color: var(--color-text);
     }
 
     .level_1 > li.submenu:hover > .level_2,
@@ -359,7 +437,10 @@ a.invisible:focus {
  * mod_navigation.html.twig with no overrides, so it inherits the same
  * details/summary toggle markup - unwanted here. Neutralize it
  * unconditionally (not just above the nav breakpoint) so the footer is
- * always a simple wrapping row of links.
+ * always a simple wrapping row of links. Needs !important: without it,
+ * the browser's native "collapsed <details> hides its non-summary
+ * content" behavior wins and the menu just vanishes with no way to
+ * reopen it (the toggle button is hidden too).
  */
 #footer .nav-toggle__button {
     display: none;
@@ -367,16 +448,16 @@ a.invisible:focus {
 
 #footer .nav-toggle {
     position: static;
+    width: auto;
 }
 
 #footer nav.mod_customnav ul.level_1 {
     position: static;
-    display: flex;
+    display: flex !important;
     flex-wrap: wrap;
     gap: var(--size-2) var(--size-5);
     background: none;
     border: 0;
-    box-shadow: none;
     padding: 0;
 }
 
@@ -430,7 +511,6 @@ select {
     color: var(--color-text);
     background: var(--color-bg);
     border: 1px solid var(--color-border);
-    border-radius: var(--radius-2);
 }
 
 textarea {
@@ -446,8 +526,8 @@ input[type="submit"] {
     color: var(--color-accent-contrast);
     background: var(--color-accent);
     border: 0;
-    border-radius: var(--radius-2);
     cursor: pointer;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, var(--size-2) 100%);
 }
 
 button:hover,
@@ -457,7 +537,6 @@ input[type="submit"]:hover {
 
 fieldset {
     border: 1px solid var(--color-border);
-    border-radius: var(--radius-2);
     padding: var(--size-4);
 }
 
@@ -476,16 +555,18 @@ fieldset {
 @media (min-width: 48rem) {
     #main .inside:has(.mod_eventlist, .mod_listing) {
         grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
-        align-items: start;
+        align-items: stretch;
     }
 }
 
 .mod_eventlist,
 .mod_listing {
+    display: flex;
+    flex-direction: column;
     background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-4);
+    border-block-start: 4px solid var(--color-accent);
     padding: var(--size-5);
+    clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, 0 100%);
 }
 
 .mod_eventlist h3,
