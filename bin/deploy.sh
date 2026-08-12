@@ -14,7 +14,7 @@ cd "$BUNDLE_DIR"
 git pull origin master
 
 echo "==> Syncing theme CSS into files/theme/"
-cp "$BUNDLE_DIR/assets/css/theme.css" "$WEBSITE_DIR/files/theme/figuralchor-hue.css"
+cp "$BUNDLE_DIR/assets/css/theme.css" "$WEBSITE_DIR/files/theme/theme.css"
 
 cd "$WEBSITE_DIR"
 
