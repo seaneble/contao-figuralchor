@@ -1,0 +1,33 @@
+{#
+ # Override of the default main navigation template: wraps the menu in a
+ # <details>/<summary> disclosure so it can act as a mobile toggle without
+ # any JavaScript. On wide viewports the toggle is hidden via CSS and the
+ # menu displays as a normal horizontal bar (see theme.css, "Navigation").
+ #}
+{% set wrapperAttributes = attrs(cssID)
+    .addClass([class, 'block'])
+    .addStyle(style|default)
+    .setIfExists('aria-label', ariaLabel|insert_tag)
+    .mergeWith(wrapperAttributes|default)
+%}
+
+<!-- indexer::stop -->
+<nav{{ wrapperAttributes }}>
+
+    {% if headline %}
+        <{{ hl }}>{{ headline|insert_tag_raw }}</{{ hl }}>
+    {% endif %}
+
+    <a href="{{ request }}#{{ skipId }}" class="invisible">{{ skipNavigation }}</a>
+
+    <details class="nav-toggle">
+        <summary class="nav-toggle__button">
+            <span class="invisible">Menü ein-/ausblenden</span>
+        </summary>
+        {{ items|raw }}
+    </details>
+
+    <span id="{{ skipId }}" class="invisible"></span>
+
+</nav>
+<!-- indexer::continue -->

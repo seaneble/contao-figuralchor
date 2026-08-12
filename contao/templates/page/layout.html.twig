@@ -4,3 +4,28 @@
     {{ parent() }}
     <style>:root{--theme-hue:{{ figuralchor_theme_hue() }}}</style>
 {% endblock %}
+
+{% block body_content %}
+    {% slot header %}
+        <header id="header">
+            <h1 class="site-branding">
+                <a href="/">
+                    <img
+                        src="/files/theme/logo/Logo_Figuralchor_schwarz_mit_Schrift.svg"
+                        alt="Figuralchor Stuttgart"
+                        width="200" height="51"
+                    >
+                </a>
+            </h1>
+            {{ slot() }}
+        </header>
+    {% endslot %}
+
+    {% slot main %}
+        <main>{{ slot() }}</main>
+    {% endslot %}
+
+    {% slot footer %}
+        <footer>{{ slot() }}</footer>
+    {% endslot %}
+{% endblock %}
