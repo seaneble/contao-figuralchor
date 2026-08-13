@@ -268,7 +268,17 @@ a.invisible:focus {
     width: auto;
 }
 
-/* ---------- Navigation ---------- */
+/* ---------- Navigation ----------
+ * Scoping note: Contao's sitemap module reuses the exact same nav_default
+ * template as the navigation modules, so it emits identical .level_1/
+ * .level_2/.submenu classes wrapped in a plain <div class="mod_sitemap">
+ * instead of a <nav>. Every selector below that shouldn't also apply to
+ * the sitemap is scoped with a `nav` ancestor for that reason - without
+ * it, e.g. the desktop hover-dropdown rules would hide the sitemap's
+ * sub-pages entirely (display:none, only shown on :hover, which nothing
+ * on a sitemap page ever hovers). See "Sitemap" further down for its own,
+ * deliberately un-dropdown-like, always-expanded tree styling.
+ */
 
 #header nav.mod_navigation {
     color: var(--color-accent-contrast);
@@ -285,6 +295,8 @@ a.invisible:focus {
     background: none;
     border: 0;
     color: inherit;
+    position: relative;
+    z-index: 21; /* above both the panel and its full-page overlay */
 }
 
 .nav-toggle__button::before {
@@ -307,31 +319,47 @@ a.invisible:focus {
     outline-offset: 2px;
 }
 
-/* Mobile dropdown panel: hidden by default, shown by the toggle script via
-   aria-expanded on the button (see mod_navigation.html.twig) - a plain
-   sibling selector, no JS-toggled class needed. Plain <div>, not
-   <details>/<summary>: closed <details> content is skipped by the layout
-   engine entirely (not just hidden), and no CSS override - not
-   `display:flex !important`, not explicit width/height, nothing short of
-   the `open` attribute itself - makes it lay out normally while "closed".
-   That's incompatible with also wanting it to become a normal, always-
-   visible, non-absolutely-positioned bar at wider viewports, which is
-   what this component needs to do. */
-#header nav.mod_navigation {
-    position: relative;
+/* Full-page click-catcher, visible only while the menu is open, sitting
+   behind the panel (z-index 15 < panel's 20) but above page content -
+   clicking it is clicking its <label>, which closes the same checkbox.
+   Zero JS "close on click outside". */
+.nav-toggle__overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 15;
+    cursor: default;
 }
 
+.nav-toggle-checkbox:checked ~ .nav-toggle__overlay {
+    display: block;
+}
+
+/*
+ * Mobile dropdown panel, anchored to #header itself (not to <nav>, whose
+ * own box is only ever as wide as the toggle button - anchoring there
+ * previously made the panel's horizontal position depend on exactly how
+ * <nav> happened to size itself). display:none by default; shown via the
+ * checkbox's :checked sibling selector. Deliberately a plain <div>, not
+ * <details>/<summary>: closed <details> content is skipped by the
+ * browser's layout engine entirely, not just hidden, and no CSS override
+ * can make it lay out normally while visually "closed" - incompatible
+ * with this component also needing to become a normal, always-visible,
+ * non-absolutely-positioned bar at wider viewports.
+ */
 .nav-toggle {
     display: none;
     position: absolute;
-    inset-inline-end: 0;
-    top: calc(100% + var(--size-2));
-    min-width: 14rem;
+    inset-inline-end: var(--size-5); /* matches #header .inside's own padding-inline */
+    top: 100%;
+    margin-block-start: var(--size-2);
+    min-width: 16rem;
+    max-width: calc(100vw - 2 * var(--size-5));
     background: var(--color-surface);
     border-inline-start: 4px solid var(--color-accent);
-    padding: var(--size-3);
+    padding: var(--size-4);
     flex-direction: column;
-    gap: var(--size-1);
+    gap: var(--size-2);
     z-index: 20;
 }
 
@@ -339,33 +367,48 @@ a.invisible:focus {
     display: flex;
 }
 
-.level_2 {
+nav .level_2 {
     padding-inline-start: var(--size-4);
     display: flex;
     flex-direction: column;
-    gap: var(--size-1);
+    gap: var(--size-2);
 }
 
 .mod_navigation a,
 .mod_navigation strong,
 .mod_customnav a {
     display: inline-block;
-    padding-block: var(--size-1);
+    padding-block: var(--size-2);
     color: inherit;
     text-decoration: none;
+}
+
+.mod_navigation a:hover,
+.mod_navigation strong:hover,
+.mod_customnav a:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
 }
 
 /* Inside the mobile/dropdown panels the text sits on --color-surface again,
    not the accent header background, so it needs the regular text color. */
 .nav-toggle a,
 .nav-toggle strong,
-.level_1 > li.submenu > .level_2 a {
+nav .level_1 > li.submenu > .level_2 a {
     color: var(--color-text);
 }
 
 .mod_navigation strong[aria-current="page"] {
     text-decoration: underline;
     text-decoration-thickness: 2px;
+    font-weight: var(--font-weight-7);
+}
+
+/* Contao marks every ancestor of the active page with a "trail" class
+   (both the <li> and the <a>/<strong> get it) - bold, not underlined, so
+   it reads as "you're in this section" without being confused for
+   "you're on this exact page" (that's the underline above). */
+nav .trail {
     font-weight: var(--font-weight-7);
 }
 
@@ -389,10 +432,11 @@ a.invisible:focus {
 
 /* --bp-nav: 48rem - see file header note on the two breakpoints. Above
    this width the menu is a normal static bar regardless of the toggle
-   button's state - a plain div needs none of the workarounds a <details>
-   ancestor would have required here. */
+   button's/checkbox's state - a plain div needs none of the workarounds a
+   <details> ancestor would have required here. */
 @media (min-width: 48rem) {
-    .nav-toggle__button {
+    .nav-toggle__button,
+    .nav-toggle__overlay {
         display: none;
     }
 
@@ -402,6 +446,7 @@ a.invisible:focus {
         background: none;
         border: 0;
         padding: 0;
+        max-width: none;
     }
 
     .nav-toggle > ul.level_1 {
@@ -419,11 +464,11 @@ a.invisible:focus {
         color: inherit;
     }
 
-    .level_1 > li.submenu {
+    nav .level_1 > li.submenu {
         position: relative;
     }
 
-    .level_1 > li.submenu > .level_2 {
+    nav .level_1 > li.submenu > .level_2 {
         display: none;
         position: absolute;
         top: 100%;
@@ -431,16 +476,17 @@ a.invisible:focus {
         min-width: 12rem;
         background: var(--color-surface);
         border-block-start: 4px solid var(--color-accent);
-        padding: var(--size-2);
+        padding: var(--size-3);
+        gap: var(--size-1);
         z-index: 30;
     }
 
-    .level_1 > li.submenu > .level_2 a {
+    nav .level_1 > li.submenu > .level_2 a {
         color: var(--color-text);
     }
 
-    .level_1 > li.submenu:hover > .level_2,
-    .level_1 > li.submenu:focus-within > .level_2 {
+    nav .level_1 > li.submenu:hover > .level_2,
+    nav .level_1 > li.submenu:focus-within > .level_2 {
         display: flex;
     }
 }
@@ -449,10 +495,11 @@ a.invisible:focus {
  * Footer legal nav: mod_customnav's own template just extends
  * mod_navigation.html.twig with no overrides, so it inherits the same
  * toggle markup - unwanted here. Force it to always render as the
- * desktop flat-bar layout, regardless of viewport or button state, so
+ * desktop flat-bar layout, regardless of viewport or checkbox state, so
  * the footer is always a simple wrapping row of links.
  */
-#footer .nav-toggle__button {
+#footer .nav-toggle__button,
+#footer .nav-toggle__overlay {
     display: none;
 }
 
@@ -476,6 +523,28 @@ a.invisible:focus {
     font-size: var(--font-size-0);
 }
 
+/* ---------- Sitemap ----------
+ * Same markup/classes as navigation (see scoping note above) but shown as
+ * a plain always-expanded tree, not a dropdown - indent + a rule line per
+ * level rather than hover-to-reveal.
+ */
+
+.mod_sitemap .level_1,
+.mod_sitemap .level_2 {
+    display: block;
+}
+
+.mod_sitemap li {
+    padding-block: var(--size-1);
+}
+
+.mod_sitemap .level_2 {
+    padding-inline-start: var(--size-5);
+    border-inline-start: 2px solid var(--color-border);
+    margin-inline-start: var(--size-2);
+    margin-block-start: var(--size-1);
+}
+
 /* ---------- Typography ---------- */
 
 h1, h2, h3, h4, h5, h6 {
@@ -496,13 +565,25 @@ p {
     max-width: 70ch;
 }
 
-/* ---------- Forms ---------- */
+/* ---------- Forms ----------
+ * Contao wraps every real form's fields in <div class="formbody">, itself
+ * the form's only direct child (plus hidden inputs) - the actual widgets
+ * (.widget-text, .widget-submit, etc.) are formbody's children, not
+ * form's. Confirmed against the live login and contact-form markup
+ * rather than assumed: an earlier version of this file put display:flex
+ * and gap on `form` itself, which had no visible effect at all (a single
+ * flex child needs no gap) and is why fields/buttons had no consistent
+ * spacing.
+ */
 
 form {
+    max-width: 40rem;
+}
+
+.formbody {
     display: flex;
     flex-direction: column;
     gap: var(--size-4);
-    max-width: 40rem;
 }
 
 label {
@@ -526,6 +607,14 @@ textarea {
     min-height: 8rem;
 }
 
+/* The asterisk Contao appends to mandatory field labels
+   (<span class="mandatory">*</span>) - scoped to the span specifically,
+   not the (also .mandatory-classed) label/input/wrapper around it. */
+span.mandatory {
+    color: var(--color-accent);
+    font-weight: var(--font-weight-7);
+}
+
 button,
 input[type="submit"] {
     align-self: start;
@@ -547,6 +636,28 @@ input[type="submit"]:hover {
 fieldset {
     border: 1px solid var(--color-border);
     padding: var(--size-4);
+}
+
+/* Contao wraps even a single checkbox/radio in a <fieldset
+   class="checkbox_container"> for accessibility - the generic fieldset
+   border/padding above reads as an unintended box around one checkbox,
+   so neutralize it here and lay the checkbox + its label out inline. */
+fieldset.checkbox_container {
+    border: 0;
+    padding: 0;
+    margin: 0;
+}
+
+fieldset.checkbox_container span {
+    display: flex;
+    align-items: center;
+    gap: var(--size-2);
+}
+
+fieldset.checkbox_container label {
+    display: inline;
+    font-weight: var(--font-weight-4);
+    margin: 0;
 }
 
 /* ---------- Homepage tiles (event teasers / concert archive) ---------- */
@@ -610,4 +721,72 @@ fieldset {
     padding: var(--size-2) 0;
     text-align: start;
     border-block-end: 1px solid var(--color-border);
+}
+
+
+/* ---------- Calendar (month grid) ---------- */
+
+.mod_calendar table.calendar {
+    width: 100%;
+    border-collapse: collapse;
+    margin-block-end: var(--size-4);
+}
+
+.mod_calendar th {
+    padding: var(--size-2);
+    text-align: center;
+    font-weight: var(--font-weight-6);
+}
+
+.mod_calendar th.head {
+    background: var(--color-surface);
+}
+
+.mod_calendar th.head a {
+    color: inherit;
+}
+
+.mod_calendar th.label {
+    font-size: var(--font-size-0);
+    color: var(--color-text-muted);
+    font-weight: var(--font-weight-4);
+    border-block-end: 1px solid var(--color-border);
+}
+
+.mod_calendar td {
+    vertical-align: top;
+    height: 5rem;
+    padding: var(--size-1);
+    border: 1px solid var(--color-border);
+}
+
+.mod_calendar td.empty {
+    background: var(--color-surface);
+}
+
+.mod_calendar td.weekend {
+    background: color-mix(in oklch, var(--color-surface) 60%, var(--color-bg));
+}
+
+.mod_calendar td.today {
+    outline: 2px solid var(--color-accent);
+    outline-offset: -2px;
+}
+
+.mod_calendar .header {
+    font-size: var(--font-size-0);
+    color: var(--color-text-muted);
+    text-align: end;
+}
+
+.mod_calendar .event {
+    margin-block-start: var(--size-1);
+    padding: var(--size-1);
+    background: var(--color-accent);
+    font-size: var(--font-size-0);
+}
+
+.mod_calendar .event a {
+    display: block;
+    color: var(--color-accent-contrast);
 }

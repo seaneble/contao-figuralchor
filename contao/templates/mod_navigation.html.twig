@@ -9,6 +9,10 @@
  # incompatible with this component also needing to become a normal,
  # always-visible static bar at wider viewports. Checkboxes/labels/divs
  # have none of that special-cased behavior.
+ #
+ # A second <label> acts as a full-page overlay (visible only while the
+ # menu is open, see theme.css) so clicking anywhere outside the panel
+ # closes it - same checkbox, same zero-JS mechanism.
  #}
 {% set wrapperAttributes = attrs(cssID)
     .addClass([class, 'block'])
@@ -30,6 +34,7 @@
     <label for="nav-toggle-{{ skipId }}" class="nav-toggle__button">
         <span class="invisible">Menü ein-/ausblenden</span>
     </label>
+    <label for="nav-toggle-{{ skipId }}" class="nav-toggle__overlay" aria-hidden="true"></label>
     <div class="nav-toggle">
         {{ items|raw }}
     </div>
