@@ -733,8 +733,19 @@ fieldset.checkbox_container label {
 
 .mod_calendar table.calendar {
     width: 100%;
+    table-layout: fixed;
     border-collapse: collapse;
     margin-block-end: var(--size-4);
+}
+
+/* table-layout:fixed sizes columns from the first row's cells, which is
+   the month-nav row (colspans of 2/3/2, not one cell per weekday) - set
+   the width explicitly on the actual per-weekday cells instead so all
+   seven columns come out equal regardless of content (an event chip's
+   text was otherwise free to widen just its own column). */
+.mod_calendar td,
+.mod_calendar th.label {
+    width: 14.2857%;
 }
 
 .mod_calendar th {
