@@ -313,7 +313,14 @@ a.invisible:focus {
     }
 
     .nav-toggle {
+        /* width:auto alone is enough to fix width (it fills the parent
+           rather than measuring content), but height:auto still needs to
+           measure the (collapsed) children - same bug, different axis.
+           Sidestep it with an explicit height instead of auto. */
         width: auto;
+        height: var(--size-8);
+        display: flex;
+        align-items: center;
     }
 }
 
