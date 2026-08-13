@@ -380,7 +380,11 @@ a.invisible:focus {
 
 /* --bp-nav: 48rem - see file header note on the two breakpoints */
 @media (min-width: 48rem) {
-    .nav-toggle__button {
+    /* Must match the base rule's selector exactly (same specificity) so
+       source order decides - media queries don't add specificity, so a
+       lower-specificity override here would lose to the base rule at any
+       viewport width, which is exactly what happened before this fix. */
+    .nav-toggle > summary.nav-toggle__button {
         display: none;
     }
 
