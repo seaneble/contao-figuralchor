@@ -832,3 +832,81 @@ fieldset.checkbox_container label {
     display: block;
     color: var(--color-accent-contrast);
 }
+
+/* ---------- Downloads (content element) ---------- */
+
+.content-downloads h2 {
+    margin-block-start: 0;
+}
+
+.content-downloads ul {
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-2);
+}
+
+.download-element {
+    border: 1px solid var(--color-border);
+    border-inline-start: 4px solid var(--color-accent);
+}
+
+.download-element a {
+    display: flex;
+    align-items: center;
+    gap: var(--size-3);
+    padding: var(--size-3) var(--size-4);
+    color: var(--color-text);
+    text-decoration: none;
+}
+
+.download-element a:hover {
+    background: var(--color-surface);
+    text-decoration: underline;
+}
+
+/* Generic document icon, drawn once as a CSS mask so it can be filled
+   with --color-accent instead of needing separate image assets per
+   color/hue. Feather-style "file with folded corner" outline. */
+.download-element a::before {
+    content: "";
+    flex: none;
+    width: var(--size-6);
+    height: var(--size-6);
+    background-color: var(--color-accent);
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'/%3E%3Cpolyline points='14 2 14 8 20 8'/%3E%3C/svg%3E");
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: contain;
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'/%3E%3Cpolyline points='14 2 14 8 20 8'/%3E%3C/svg%3E");
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    -webkit-mask-size: contain;
+}
+
+/* Extension badge, from Contao's own ext-* class on the <li> - covers the
+   common office/media types; anything not listed just gets the icon with
+   no badge rather than a wrong/missing label. */
+.download-element a::after {
+    flex: none;
+    margin-inline-start: auto;
+    padding: 0.15em 0.5em;
+    font-size: var(--font-size-0);
+    font-weight: var(--font-weight-7);
+    letter-spacing: 0.03em;
+    color: var(--color-accent-contrast);
+    background: var(--color-accent);
+    text-transform: uppercase;
+}
+
+.download-element.ext-pdf a::after { content: "PDF"; }
+.download-element.ext-doc a::after,
+.download-element.ext-docx a::after { content: "Doc"; }
+.download-element.ext-xls a::after,
+.download-element.ext-xlsx a::after { content: "Excel"; }
+.download-element.ext-ppt a::after,
+.download-element.ext-pptx a::after { content: "PPT"; }
+.download-element.ext-zip a::after { content: "Zip"; }
+.download-element.ext-jpg a::after,
+.download-element.ext-jpeg a::after,
+.download-element.ext-png a::after { content: "Bild"; }
+.download-element.ext-mp3 a::after { content: "MP3"; }
