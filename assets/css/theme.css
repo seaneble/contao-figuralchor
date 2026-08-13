@@ -407,8 +407,13 @@ nav .level_1 > li.submenu > .level_2 a {
 /* Contao marks every ancestor of the active page with a "trail" class
    (both the <li> and the <a>/<strong> get it) - bold, not underlined, so
    it reads as "you're in this section" without being confused for
-   "you're on this exact page" (that's the underline above). */
-nav .trail {
+   "you're on this exact page" (that's the underline above). Target the
+   <a>/<strong> specifically, NOT the <li> - font-weight inherits, and the
+   <li>'s nested <ul class="level_2"> submenu is its child (a sibling of
+   the <a>, but still a descendant of the <li>), so bolding the <li>
+   itself was bolding every item in the submenu too. */
+nav a.trail,
+nav strong.trail {
     font-weight: var(--font-weight-7);
 }
 
