@@ -748,6 +748,32 @@ fieldset.checkbox_container label {
     width: 14.2857%;
 }
 
+/* A 7-column month grid has no good narrow-screen answer on its own - so
+   it stays a real grid (scrollable, not squished) as a floor, but the
+   intended mobile experience is a plain event list replacing it
+   entirely. See README for the module to add in the backend to enable
+   this - until it exists, :has() below is simply false and the calendar
+   just uses the scrollable fallback. */
+@media (max-width: 47.99rem) {
+    .mod_calendar {
+        overflow-x: auto;
+    }
+
+    .mod_calendar table.calendar {
+        min-width: 40rem;
+    }
+
+    body:has(.calendar-mobile-list) .mod_calendar {
+        display: none;
+    }
+}
+
+@media (min-width: 48rem) {
+    .calendar-mobile-list {
+        display: none;
+    }
+}
+
 .mod_calendar th {
     padding: var(--size-2);
     text-align: center;

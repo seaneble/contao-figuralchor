@@ -110,6 +110,27 @@ confirmed by checking `tl_layout.template` directly rather than assuming).
   specific Contao form's field classes, so it applies to any form module
   (login, search, member forms, Contao forms) without per-form setup.
 
+## Calendar: mobile list
+
+The internal calendar (`/interna/termine`, module "Kalender", pulling from
+calendars 1+2) is a 7-column month grid - fine on desktop, cramped on any
+phone. Rather than force the grid to survive narrow screens, add a second
+module on the same page:
+
+1. Create a new module of type **Veranstaltungsliste (eventlist)**, select
+   the same two calendars (**Probentermine** and **Auftritte**) the
+   existing "Kalender" module uses.
+2. Give it the CSS class **`calendar-mobile-list`** in its "CSS-ID/Klasse"
+   field (Expert settings).
+3. Place it on the Termine page in the same position as the existing
+   calendar module.
+
+`theme.css` then handles the rest automatically: below 768px the grid
+hides and this list shows; at 768px and up, the reverse. Until this
+module exists, the grid just stays visible everywhere with a horizontal-
+scroll fallback (`overflow-x: auto`) so it's still usable, never both-or-
+neither.
+
 ## Fonts
 
 `--font-body` tries `"Helvetica Neue"` and `Helvetica` first, falling back
