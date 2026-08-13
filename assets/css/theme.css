@@ -274,72 +274,17 @@ a.invisible:focus {
     color: var(--color-accent-contrast);
 }
 
-.nav-toggle {
-    position: relative;
-}
-
-/*
- * Below the nav breakpoint: pin both the outer nav item and the details
- * element to their content's own size (not just "don't grow/shrink" -
- * width:max-content is the part that actually matters), so opening the
- * menu can never shift the toggle button or reflow the header. The
- * dropdown itself is position:absolute (below), which is what actually
- * keeps it from affecting box sizing here.
- */
-@media (max-width: 47.99rem) {
-    #header nav.mod_navigation {
-        flex: none;
-    }
-
-    .nav-toggle {
-        width: max-content;
-    }
-}
-
-/*
- * At/above the nav breakpoint, do NOT size .nav-toggle from its own
- * content. Closed <details> elements collapse their non-summary content
- * out of intrinsic-size calculations in every browser tested - even
- * `display: flex !important` on the child cannot override that, since
- * it's the ANCESTOR's box that collapses, not the child's. Rather than
- * fight that, give nav real width from its flex-grown parent instead:
- * nav claims the header's remaining space, .nav-toggle fills nav, and
- * the menu list fills .nav-toggle - none of that depends on the details
- * element's own collapsed intrinsic size.
- */
-@media (min-width: 48rem) {
-    #header nav.mod_navigation {
-        flex: 1 0 auto;
-    }
-
-    .nav-toggle {
-        /* width:auto alone is enough to fix width (it fills the parent
-           rather than measuring content), but height:auto still needs to
-           measure the (collapsed) children - same bug, different axis.
-           Sidestep it with an explicit height instead of auto. */
-        width: auto;
-        height: var(--size-8);
-        display: flex;
-        align-items: center;
-    }
-}
-
-.nav-toggle > summary.nav-toggle__button {
+.nav-toggle__button {
     display: flex;
     align-items: center;
     justify-content: center;
     width: var(--size-8);
     height: var(--size-8);
+    padding: 0;
     cursor: pointer;
-    list-style: none;
-}
-
-.nav-toggle__button::-webkit-details-marker {
-    display: none;
-}
-
-.nav-toggle__button::marker {
-    content: "";
+    background: none;
+    border: 0;
+    color: inherit;
 }
 
 .nav-toggle__button::before {
@@ -351,12 +296,33 @@ a.invisible:focus {
     box-shadow: 0 -7px currentColor, 0 7px currentColor;
 }
 
-.nav-toggle:focus-within > summary.nav-toggle__button,
-.nav-toggle > summary.nav-toggle__button:hover {
+.nav-toggle__button:hover {
     background: color-mix(in oklch, var(--color-accent-contrast) 20%, transparent);
 }
 
-.nav-toggle > ul.level_1 {
+/* The checkbox itself is visually hidden (.invisible), so show focus on
+   its label instead - otherwise keyboard focus would be invisible here. */
+.nav-toggle-checkbox:focus-visible + .nav-toggle__button {
+    outline: 3px solid var(--color-accent-contrast);
+    outline-offset: 2px;
+}
+
+/* Mobile dropdown panel: hidden by default, shown by the toggle script via
+   aria-expanded on the button (see mod_navigation.html.twig) - a plain
+   sibling selector, no JS-toggled class needed. Plain <div>, not
+   <details>/<summary>: closed <details> content is skipped by the layout
+   engine entirely (not just hidden), and no CSS override - not
+   `display:flex !important`, not explicit width/height, nothing short of
+   the `open` attribute itself - makes it lay out normally while "closed".
+   That's incompatible with also wanting it to become a normal, always-
+   visible, non-absolutely-positioned bar at wider viewports, which is
+   what this component needs to do. */
+#header nav.mod_navigation {
+    position: relative;
+}
+
+.nav-toggle {
+    display: none;
     position: absolute;
     inset-inline-end: 0;
     top: calc(100% + var(--size-2));
@@ -364,10 +330,13 @@ a.invisible:focus {
     background: var(--color-surface);
     border-inline-start: 4px solid var(--color-accent);
     padding: var(--size-3);
-    display: flex;
     flex-direction: column;
     gap: var(--size-1);
     z-index: 20;
+}
+
+.nav-toggle-checkbox:checked ~ .nav-toggle {
+    display: flex;
 }
 
 .level_2 {
@@ -388,8 +357,8 @@ a.invisible:focus {
 
 /* Inside the mobile/dropdown panels the text sits on --color-surface again,
    not the accent header background, so it needs the regular text color. */
-.nav-toggle > ul.level_1 a,
-.nav-toggle > ul.level_1 strong,
+.nav-toggle a,
+.nav-toggle strong,
 .level_1 > li.submenu > .level_2 a {
     color: var(--color-text);
 }
@@ -407,8 +376,7 @@ a.invisible:focus {
    the flat bar layout kicks in - the top-level links); the dropdown
    panels and submenus sit on the light --color-surface regardless of
    breakpoint and need the regular dark ring. */
-#header .site-branding a:focus-visible,
-#header .nav-toggle > summary:focus-visible {
+#header .site-branding a:focus-visible {
     outline-color: var(--color-accent-contrast);
 }
 
@@ -419,29 +387,28 @@ a.invisible:focus {
     }
 }
 
-/* --bp-nav: 48rem - see file header note on the two breakpoints */
+/* --bp-nav: 48rem - see file header note on the two breakpoints. Above
+   this width the menu is a normal static bar regardless of the toggle
+   button's state - a plain div needs none of the workarounds a <details>
+   ancestor would have required here. */
 @media (min-width: 48rem) {
-    /* Must match the base rule's selector exactly (same specificity) so
-       source order decides - media queries don't add specificity, so a
-       lower-specificity override here would lose to the base rule at any
-       viewport width, which is exactly what happened before this fix. */
-    .nav-toggle > summary.nav-toggle__button {
+    .nav-toggle__button {
         display: none;
     }
 
     .nav-toggle {
+        display: block !important;
         position: static;
-    }
-
-    .nav-toggle > ul.level_1 {
-        position: static;
-        display: flex !important;
-        flex-direction: row;
-        align-items: center;
-        justify-content: flex-end;
         background: none;
         border: 0;
         padding: 0;
+    }
+
+    .nav-toggle > ul.level_1 {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-end;
         gap: var(--size-5);
     }
 
@@ -481,30 +448,26 @@ a.invisible:focus {
 /*
  * Footer legal nav: mod_customnav's own template just extends
  * mod_navigation.html.twig with no overrides, so it inherits the same
- * details/summary toggle markup - unwanted here. Neutralize it
- * unconditionally (not just above the nav breakpoint) so the footer is
- * always a simple wrapping row of links. Needs !important: without it,
- * the browser's native "collapsed <details> hides its non-summary
- * content" behavior wins and the menu just vanishes with no way to
- * reopen it (the toggle button is hidden too).
+ * toggle markup - unwanted here. Force it to always render as the
+ * desktop flat-bar layout, regardless of viewport or button state, so
+ * the footer is always a simple wrapping row of links.
  */
 #footer .nav-toggle__button {
     display: none;
 }
 
 #footer .nav-toggle {
+    display: block !important;
     position: static;
-    width: auto;
-}
-
-#footer nav.mod_customnav ul.level_1 {
-    position: static;
-    display: flex !important;
-    flex-wrap: wrap;
-    gap: var(--size-2) var(--size-5);
     background: none;
     border: 0;
     padding: 0;
+}
+
+#footer nav.mod_customnav ul.level_1 {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--size-2) var(--size-5);
 }
 
 #footer nav.mod_customnav a {
