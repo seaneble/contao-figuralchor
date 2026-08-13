@@ -271,16 +271,50 @@ a.invisible:focus {
 /* ---------- Navigation ---------- */
 
 #header nav.mod_navigation {
-    /* Fixed sizing, independent of the details' open/closed content, so
-       opening the menu can never shift the toggle button or reflow the
-       header layout. */
-    flex: none;
     color: var(--color-accent-contrast);
 }
 
 .nav-toggle {
     position: relative;
-    width: max-content;
+}
+
+/*
+ * Below the nav breakpoint: pin both the outer nav item and the details
+ * element to their content's own size (not just "don't grow/shrink" -
+ * width:max-content is the part that actually matters), so opening the
+ * menu can never shift the toggle button or reflow the header. The
+ * dropdown itself is position:absolute (below), which is what actually
+ * keeps it from affecting box sizing here.
+ */
+@media (max-width: 47.99rem) {
+    #header nav.mod_navigation {
+        flex: none;
+    }
+
+    .nav-toggle {
+        width: max-content;
+    }
+}
+
+/*
+ * At/above the nav breakpoint, do NOT size .nav-toggle from its own
+ * content. Closed <details> elements collapse their non-summary content
+ * out of intrinsic-size calculations in every browser tested - even
+ * `display: flex !important` on the child cannot override that, since
+ * it's the ANCESTOR's box that collapses, not the child's. Rather than
+ * fight that, give nav real width from its flex-grown parent instead:
+ * nav claims the header's remaining space, .nav-toggle fills nav, and
+ * the menu list fills .nav-toggle - none of that depends on the details
+ * element's own collapsed intrinsic size.
+ */
+@media (min-width: 48rem) {
+    #header nav.mod_navigation {
+        flex: 1 0 auto;
+    }
+
+    .nav-toggle {
+        width: auto;
+    }
 }
 
 .nav-toggle > summary.nav-toggle__button {
@@ -397,6 +431,7 @@ a.invisible:focus {
         display: flex !important;
         flex-direction: row;
         align-items: center;
+        justify-content: flex-end;
         background: none;
         border: 0;
         padding: 0;
