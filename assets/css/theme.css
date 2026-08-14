@@ -850,10 +850,18 @@ fieldset.checkbox_container label {
     border-inline-start: 4px solid var(--color-accent);
 }
 
+/* Grid, not flex: the filename is a bare text node between the icon and
+   badge (both fixed-size), and a plain flex row won't let that text wrap
+   - long filenames just overflowed on narrow screens. minmax(0, 1fr) on
+   the middle track (vs. bare 1fr) lets it shrink below its content's
+   natural width, which is what actually allows wrapping instead of
+   overflow. align-items:start rather than center so short and wrapped
+   (multi-line) filenames both look right. */
 .download-element a {
-    display: flex;
-    align-items: center;
-    gap: var(--size-3);
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: start;
+    gap: var(--size-2) var(--size-3);
     padding: var(--size-3) var(--size-4);
     color: var(--color-text);
     text-decoration: none;
