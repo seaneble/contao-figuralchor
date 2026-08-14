@@ -845,7 +845,23 @@ fieldset.checkbox_container label {
     gap: var(--size-2);
 }
 
-.download-element {
+/* Two structurally different cases share the "download-element" class:
+   a list item (<li class="download-element"> inside .content-downloads,
+   nothing else in it) and a standalone single download (a
+   ".content-download" div that ALSO wraps its own <h3> heading). Box
+   only the <li> case here - boxing the standalone case's outer div would
+   pull its heading inside the box, which isn't right; that case gets the
+   box on just the <a> instead, below. */
+.download-element:not(.content-download) {
+    border: 1px solid var(--color-border);
+    border-inline-start: 4px solid var(--color-accent);
+}
+
+.content-download h3 {
+    margin-block-start: 0;
+}
+
+.content-download a {
     border: 1px solid var(--color-border);
     border-inline-start: 4px solid var(--color-accent);
 }
