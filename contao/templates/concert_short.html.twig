@@ -1,0 +1,25 @@
+{#
+    "Konzerte" page item: more verbose than concert_latest - shows the
+    teaser and poster thumbnail, and links to the reader page (concertlist's
+    jumpTo is set for this module instance, unlike the homepage one).
+#}
+<article class="concert-item{% if hasLink %} has-link{% endif %}">
+    {% if addImage %}
+        <div class="concert-item__poster">
+            {{ include('@Contao/image.html.twig') }}
+        </div>
+    {% endif %}
+    <div class="concert-item__body">
+        <p class="concert-item__meta">{{ year }}</p>
+        <h3 class="concert-item__title">
+            {% if hasLink %}
+                <a href="{{ href }}">{{ title }}</a>
+            {% else %}
+                {{ title }}
+            {% endif %}
+        </h3>
+        {% if hasTeaser %}
+            <p class="concert-item__teaser">{{ teaser|nl2br }}</p>
+        {% endif %}
+    </div>
+</article>

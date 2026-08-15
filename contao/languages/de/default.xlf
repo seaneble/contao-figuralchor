@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.1">
+  <file datatype="php" original="contao/languages/de/default.php" source-language="de">
+    <body>
+      <trans-unit id="MSC.concertOverview">
+        <source>Zurück zur Übersicht</source>
+      </trans-unit>
+      <trans-unit id="MSC.concertDates">
+        <source>Termine</source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

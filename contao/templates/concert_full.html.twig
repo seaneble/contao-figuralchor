@@ -1,0 +1,31 @@
+{#
+    Reader: full concert - title, year, poster, HTML description, and the
+    linked tl_calendar_events dates ("the exact happenings").
+#}
+<div class="concert-full">
+    <p class="concert-full__meta">{{ year }}</p>
+    <h1>{{ title }}</h1>
+
+    {% if addImage %}
+        <div class="concert-full__poster">
+            {{ include('@Contao/image.html.twig') }}
+        </div>
+    {% endif %}
+
+    {% if hasDescription %}
+        <div class="ce_text content-text block">
+            {{ description|sanitize_html('contao')|csp_inline_styles|insert_tag_raw }}
+        </div>
+    {% elseif hasTeaser %}
+        <p class="concert-full__teaser">{{ teaser|nl2br }}</p>
+    {% endif %}
+
+    {% if hasEvents %}
+        <h2>{{ eventsHeadline }}</h2>
+        <ul class="concert-full__events">
+            {% for event in events %}
+                <li><span class="date">{{ event.date }}</span> {{ event.title }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</div>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.1">
+  <file datatype="php" original="contao/languages/de/modules.php" source-language="de">
+    <body>
+      <trans-unit id="MOD.concert.0">
+        <source>Konzerte</source>
+      </trans-unit>
+      <trans-unit id="MOD.concert.1">
+        <source>Konzerte verwalten</source>
+      </trans-unit>
+      <trans-unit id="MOD.tl_concert">
+        <source>Konzerte</source>
+      </trans-unit>
+      <trans-unit id="FMD.concert">
+        <source>Konzerte</source>
+      </trans-unit>
+      <trans-unit id="FMD.concertlist.0">
+        <source>Konzertliste</source>
+      </trans-unit>
+      <trans-unit id="FMD.concertlist.1">
+        <source>Fügt der Seite eine Liste von Konzerten hinzu</source>
+      </trans-unit>
+      <trans-unit id="FMD.concertreader.0">
+        <source>Konzert-Detailansicht</source>
+      </trans-unit>
+      <trans-unit id="FMD.concertreader.1">
+        <source>Stellt die Details eines einzelnen Konzerts dar</source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.1">
+  <file datatype="php" original="contao/languages/de/tl_concert.php" source-language="de">
+    <body>
+      <trans-unit id="tl_concert.year.0">
+        <source>Jahr</source>
+      </trans-unit>
+      <trans-unit id="tl_concert.year.1">
+        <source>Bitte geben Sie das Jahr des Konzerts ein.</source>
+      </trans-unit>
+      <trans-unit id="tl_concert.title.0">
+        <source>Titel</source>
+      </trans-unit>
+      <trans-unit id="tl_concert.title.1">
+        <source>Bitte geben Sie den Titel des Konzerts ein.</source>
+      </trans-unit>
+      <trans-unit id="tl_concert.alias.0">
+        <source>Alias</source>
+      </trans-unit>
+      <trans-unit id="tl_concert.alias.1">
+        <source>Der Alias ist eine eindeutige Kennung, die anstelle der numerischen ID verwendet werden kann. Wird er leer gelassen, wird er automatisch aus Jahr und Titel erzeugt.</source>
+      </trans-unit>
+      <trans-unit id="tl_concert.teaser.0">
+        <source>Teaser</source>
+      </trans-unit>
+      <trans-unit id="tl_concert.teaser.1">
+        <source>Ein kurzer, einfacher Anreißertext ohne Formatierung.</source>
+      </trans-unit>
+      <trans-unit id="tl_concert.description.0">
+        <source>Beschreibung</source>
+      </trans-unit>
+      <trans-unit id="tl_concert.description.1">
+        <source>Die ausführliche Beschreibung des Konzerts.</source>
+      </trans-unit>
+      <trans-unit id="tl_concert.posterSRC.0">
+        <source>Konzertplakat</source>
+      </trans-unit>
+      <trans-unit id="tl_concert.posterSRC.1">
+        <source>Bitte wählen Sie das Plakatbild für dieses Konzert aus.</source>
+      </trans-unit>
+      <trans-unit id="tl_concert.events.0">
+        <source>Termine</source>
+      </trans-unit>
+      <trans-unit id="tl_concert.events.1">
+        <source>Bitte wählen Sie die Kalendertermine aus, die zu diesem Konzert gehören.</source>
+      </trans-unit>
+      <trans-unit id="tl_concert.published.0">
+        <source>Veröffentlichen</source>
+      </trans-unit>
+      <trans-unit id="tl_concert.published.1">
+        <source>Diesen Eintrag veröffentlichen.</source>
+      </trans-unit>
+      <trans-unit id="tl_concert.title_legend">
+        <source>Titel</source>
+      </trans-unit>
+      <trans-unit id="tl_concert.teaser_legend">
+        <source>Texte</source>
+      </trans-unit>
+      <trans-unit id="tl_concert.image_legend">
+        <source>Plakat</source>
+      </trans-unit>
+      <trans-unit id="tl_concert.events_legend">
+        <source>Termine</source>
+      </trans-unit>
+      <trans-unit id="tl_concert.publish_legend">
+        <source>Veröffentlichung</source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
