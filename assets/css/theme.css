@@ -133,6 +133,22 @@ a.invisible:focus {
 }
 
 /*
+ * The footer nav's own skip-navigation link isn't the page's first tab
+ * stop, unlike the header's - fixing it to the viewport corner would pop
+ * it up far from where focus actually is. Anchor it to its own nav
+ * instead, right above the footer links it skips.
+ */
+#footer nav.mod_customnav {
+    position: relative;
+}
+
+#footer nav.mod_customnav a.invisible:focus {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+}
+
+/*
  * Opt-in utility: add via a module's "CSS ID/class" field in the backend to
  * hide that module entirely below the layout breakpoint, instead of the
  * default behavior of folding it below the main content.
