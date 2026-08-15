@@ -570,6 +570,54 @@ p {
     max-width: 70ch;
 }
 
+/* Quote block: surface + accent left border (echoes the download boxes)
+   plus a small top-right clip-path cut (echoes the event tiles) - ties it
+   into the site's flat-color / cut-corner language instead of looking like
+   a generic browser-default indent. */
+blockquote {
+    position: relative;
+    max-width: 70ch;
+    margin-block: var(--size-5);
+    margin-inline: 0;
+    padding: var(--size-5) var(--size-5) var(--size-5) var(--size-8);
+    background: var(--color-surface);
+    border-inline-start: 4px solid var(--color-accent);
+    clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, 0 100%);
+}
+
+blockquote::before {
+    content: "\201C";
+    position: absolute;
+    inset-block-start: var(--size-3);
+    inset-inline-start: var(--size-4);
+    font-size: var(--font-size-7);
+    font-weight: var(--font-weight-7);
+    line-height: 1;
+    color: var(--color-accent);
+}
+
+blockquote p {
+    margin-block-end: var(--size-3);
+}
+
+blockquote p:last-child {
+    margin-block-end: 0;
+}
+
+blockquote footer,
+blockquote cite {
+    display: block;
+    margin-block-start: var(--size-3);
+    font-style: normal;
+    font-size: var(--font-size-1);
+    color: var(--color-text-muted);
+}
+
+blockquote footer::before,
+blockquote cite::before {
+    content: "\2014 ";
+}
+
 /* ---------- Forms ----------
  * Contao wraps every real form's fields in <div class="formbody">, itself
  * the form's only direct child (plus hidden inputs) - the actual widgets
