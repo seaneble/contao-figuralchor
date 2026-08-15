@@ -14,7 +14,6 @@ $GLOBALS['TL_DCA']['tl_concert'] = array
 	'config' => array
 	(
 		'dataContainer'    => DC_Table::class,
-		'switchToEdit'     => true,
 		'enableVersioning' => true,
 		'markAsCopy'       => 'title',
 		'sql'              => array
@@ -174,13 +173,26 @@ class tl_concert extends Backend
 	/**
 	 * Options for the "events" multi-select, grouped by calendar name so the
 	 * (searchable, via eval.chosen) dropdown stays usable once there are many.
+	 * Restricted to the calendar configured under System Settings >
+	 * "Konzerte" (concert_calendar), if one has been set.
 	 */
 	public function getCalendarEvents(): array
 	{
 		$groups = array();
+		$intCalendar = (int) Config::get('concert_calendar');
 
-		$result = Database::getInstance()
-			->query("SELECT e.id, e.title, e.startTime, c.title AS calendarTitle FROM tl_calendar_events e LEFT JOIN tl_calendar c ON c.id = e.pid ORDER BY c.title, e.startTime DESC");
+		$sql = "SELECT e.id, e.title, e.startTime, c.title AS calendarTitle FROM tl_calendar_events e LEFT JOIN tl_calendar c ON c.id = e.pid";
+		$values = array();
+
+		if ($intCalendar > 0)
+		{
+			$sql .= " WHERE e.pid=?";
+			$values[] = $intCalendar;
+		}
+
+		$sql .= " ORDER BY c.title, e.startTime DESC";
+
+		$result = Database::getInstance()->prepare($sql)->execute(...$values);
 
 		while ($result->next())
 		{
