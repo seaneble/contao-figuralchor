@@ -779,12 +779,6 @@ fieldset.checkbox_container label {
     padding-block-start: 0;
 }
 
-.mod_concertlist .concert .year {
-    display: block;
-    font-size: var(--font-size-0);
-    color: var(--color-text-muted);
-}
-
 .mod_concertlist .concert .teaser {
     margin-block: var(--size-1) 0;
     font-size: var(--font-size-0);
@@ -822,50 +816,21 @@ fieldset.checkbox_container label {
 
 /* ---------- Concerts (concert list/reader) ---------- */
 
-/* concert_short.html.twig - the more verbose "Konzerte" page item, with a
-   poster thumbnail and a link to the reader. Same accent-left-border card
-   language as the download boxes. */
-.concert-item {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
-    gap: var(--size-4);
-    padding: var(--size-4);
-    margin-block-end: var(--size-4);
-    background: var(--color-surface);
-    border-inline-start: 4px solid var(--color-accent);
-}
-
-.concert-item:not(:has(.concert-item__poster)) {
-    grid-template-columns: 1fr;
-}
-
+/* concert_short.html.twig - deliberately plain, matching the existing
+   article-teaser look (mod_article.html.twig's "alias" block) rather than
+   a boxed card - no background/border here on purpose. Poster is unsized
+   for now (max-width only) - proper responsive sizing via imgSize is a
+   follow-up. */
 .concert-item__poster img {
     display: block;
-    max-width: 8rem;
+    max-width: 16rem;
     height: auto;
+    margin-block-end: var(--size-3);
 }
 
 .concert-item__meta {
     margin: 0;
     font-size: var(--font-size-0);
-    color: var(--color-text-muted);
-}
-
-.concert-item__title {
-    margin-block: var(--size-1) var(--size-2);
-}
-
-.concert-item.has-link .concert-item__title a {
-    color: var(--color-text);
-    text-decoration: none;
-}
-
-.concert-item.has-link .concert-item__title a:hover {
-    text-decoration: underline;
-}
-
-.concert-item__teaser {
-    margin: 0;
     color: var(--color-text-muted);
 }
 

@@ -11,6 +11,7 @@ use Contao\PageModel;
 use Contao\StringUtil;
 use Contao\System;
 use Figuralchor\ContaoBundle\Model\ConcertModel;
+use Symfony\Component\Routing\Exception\ExceptionInterface;
 
 /**
  * Shared rendering logic for the "concertlist" and "concertreader" front end
@@ -35,6 +36,8 @@ abstract class ModuleConcert extends Module
 		{
 			$objTemplate->hasLink = true;
 			$objTemplate->href = $objJumpTo->getFrontendUrl('/' . ($objConcert->alias ?: $objConcert->id));
+			$objTemplate->more = $GLOBALS['TL_LANG']['MSC']['more'];
+			$objTemplate->readMore = sprintf($GLOBALS['TL_LANG']['MSC']['readMore'], $objConcert->title);
 		}
 
 		$objTemplate->hasTeaser = (bool) $objConcert->teaser;
@@ -75,13 +78,26 @@ abstract class ModuleConcert extends Module
 
 			if ($objEvents !== null)
 			{
+				$urlGenerator = System::getContainer()->get('contao.routing.content_url_generator');
 				$arrEvents = array();
 
 				foreach ($objEvents as $objEvent)
 				{
+					$href = null;
+
+					try
+					{
+						$href = $urlGenerator->generate($objEvent);
+					}
+					catch (ExceptionInterface)
+					{
+						// No route available (e.g. the calendar has no reader page) - render without a link
+					}
+
 					$arrEvents[] = array(
 						'date'  => Date::parse(Config::get('dateFormat'), $objEvent->startTime),
 						'title' => $objEvent->title,
+						'href'  => $href,
 					);
 				}
 

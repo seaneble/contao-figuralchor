@@ -1,12 +1,16 @@
 {#
-    Homepage tile item: plain text only, no per-item link - this is the
-    "minus the sorting title link" variant of the concert list, replacing
-    the old ce_table "Konzertarchiv" and its sortable column header link.
-    Sits inside the .mod_concertlist card (see the "Homepage tiles" CSS).
+    Homepage tile item: compact, no year, title links to the reader (via
+    this module instance's jumpTo). Sits inside the .mod_concertlist card
+    (see the "Homepage tiles" CSS).
 #}
 <div class="concert">
-    <span class="year">{{ year }}</span>
-    <span class="title">{{ title }}</span>
+    <span class="title">
+        {% if hasLink %}
+            <a href="{{ href }}">{{ title }}</a>
+        {% else %}
+            {{ title }}
+        {% endif %}
+    </span>
     {% if hasTeaser %}
         <p class="teaser">{{ teaser|nl2br }}</p>
     {% endif %}

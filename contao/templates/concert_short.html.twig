@@ -1,25 +1,27 @@
 {#
-    "Konzerte" page item: more verbose than concert_latest - shows the
-    teaser and poster thumbnail, and links to the reader page (concertlist's
-    jumpTo is set for this module instance, unlike the homepage one).
+    "Konzerte" page item - deliberately plain, matching the existing
+    article-teaser look (see contao/templates/mod_article.html.twig's
+    "alias" block: plain h3 heading, teaser text, "Weiterlesen" link at the
+    bottom) rather than a boxed card.
 #}
-<article class="concert-item{% if hasLink %} has-link{% endif %}">
+<article class="concert-item">
     {% if addImage %}
         <div class="concert-item__poster">
             {{ include('@Contao/image.html.twig') }}
         </div>
     {% endif %}
-    <div class="concert-item__body">
+    <div class="ce_text content-text block">
         <p class="concert-item__meta">{{ year }}</p>
-        <h3 class="concert-item__title">
-            {% if hasLink %}
-                <a href="{{ href }}">{{ title }}</a>
-            {% else %}
-                {{ title }}
-            {% endif %}
-        </h3>
+        <h3>{{ title }}</h3>
         {% if hasTeaser %}
-            <p class="concert-item__teaser">{{ teaser|nl2br }}</p>
+            <div class="teaser">
+                <p>{{ teaser|nl2br }}</p>
+                {% if hasLink %}
+                    <p class="more"><a href="{{ href }}" title="{{ readMore }}">{{ more }} <span class="invisible">{{ title }}</span></a></p>
+                {% endif %}
+            </div>
+        {% elseif hasLink %}
+            <p class="more"><a href="{{ href }}" title="{{ readMore }}">{{ more }} <span class="invisible">{{ title }}</span></a></p>
         {% endif %}
     </div>
 </article>
