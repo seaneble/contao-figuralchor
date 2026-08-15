@@ -742,19 +742,17 @@ fieldset.checkbox_container label {
 }
 
 @media (min-width: 48rem) {
-    #main .inside:has(.mod_eventlist, .mod_listing, .mod_concertlist.concert-tile) {
+    #main .inside:has(.tile) {
         grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
         align-items: stretch;
     }
 }
 
-/* .concert-tile is added server-side (ModuleConcertList::compile()) only
-   when the compact homepage template (concert_latest) is selected - the
-   Konzerte page's plain-list instance (concert_short) has no such class,
-   so it stays unboxed. */
-.mod_eventlist,
-.mod_listing,
-.mod_concertlist.concert-tile {
+/* .tile is a manually-assigned marker (via each module's own "CSS ID/class"
+   field in the backend), not tied to a specific module type - add it to
+   any homepage module (event list, concert list, etc.) that should render
+   as a boxed tile in this grid. Modules without it render plain. */
+.tile {
     display: flex;
     flex-direction: column;
     background: var(--color-surface);
@@ -763,9 +761,7 @@ fieldset.checkbox_container label {
     clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, 0 100%);
 }
 
-.mod_eventlist h3,
-.mod_listing h3,
-.mod_concertlist.concert-tile h3 {
+.tile h3 {
     margin-block-start: 0;
     font-size: var(--font-size-3);
 }
