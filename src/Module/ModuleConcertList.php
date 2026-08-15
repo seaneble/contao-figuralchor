@@ -39,6 +39,18 @@ class ModuleConcertList extends ModuleConcert
 
 	protected function compile()
 	{
+		// The tile/card styling (background, accent border, cut corner) is
+		// meant for the compact homepage variant only - the more verbose
+		// "Konzerte" page listing (concert_short) should stay plain. Module::
+		// generate() builds $this->Template->class from $this->cssID[1]
+		// *after* compile() runs (see core's Module.php, "do not change this
+		// order"), so mutating cssID here is what actually reaches the
+		// wrapper's class list; CSS then scopes the box to .concert-tile.
+		if (($this->concert_template ?: 'concert_latest') === 'concert_latest')
+		{
+			$this->cssID[1] = trim(($this->cssID[1] ?? '') . ' concert-tile');
+		}
+
 		$this->Template->articles = array();
 		$this->Template->empty = $GLOBALS['TL_LANG']['MSC']['emptyList'];
 

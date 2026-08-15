@@ -742,15 +742,19 @@ fieldset.checkbox_container label {
 }
 
 @media (min-width: 48rem) {
-    #main .inside:has(.mod_eventlist, .mod_listing, .mod_concertlist) {
+    #main .inside:has(.mod_eventlist, .mod_listing, .mod_concertlist.concert-tile) {
         grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
         align-items: stretch;
     }
 }
 
+/* .concert-tile is added server-side (ModuleConcertList::compile()) only
+   when the compact homepage template (concert_latest) is selected - the
+   Konzerte page's plain-list instance (concert_short) has no such class,
+   so it stays unboxed. */
 .mod_eventlist,
 .mod_listing,
-.mod_concertlist {
+.mod_concertlist.concert-tile {
     display: flex;
     flex-direction: column;
     background: var(--color-surface);
@@ -761,7 +765,7 @@ fieldset.checkbox_container label {
 
 .mod_eventlist h3,
 .mod_listing h3,
-.mod_concertlist h3 {
+.mod_concertlist.concert-tile h3 {
     margin-block-start: 0;
     font-size: var(--font-size-3);
 }
