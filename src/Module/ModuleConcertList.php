@@ -43,7 +43,7 @@ class ModuleConcertList extends ModuleConcert
 		$this->Template->empty = $GLOBALS['TL_LANG']['MSC']['emptyList'];
 
 		$limit = $this->numberOfItems > 0 ? $this->numberOfItems : null;
-		$objConcerts = ConcertModel::findPublished($limit);
+		$objConcerts = ConcertModel::findPublished($limit, 0, array('excludeFuture' => (bool) $this->concert_hideFuture));
 
 		if ($objConcerts === null)
 		{

@@ -5,6 +5,12 @@
       <trans-unit id="tl_module.reader_legend">
         <source>Übersichtsseite</source>
       </trans-unit>
+      <trans-unit id="tl_module.concert_hideFuture.0">
+        <source>Zukünftige Konzerte ausblenden</source>
+      </trans-unit>
+      <trans-unit id="tl_module.concert_hideFuture.1">
+        <source>Nur Konzerte anzeigen, deren Datum in der Vergangenheit liegt (Konzerte ohne Datum gelten dabei als vergangen).</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>

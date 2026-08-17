@@ -32,14 +32,14 @@ $GLOBALS['TL_DCA']['tl_concert'] = array
 		'sorting' => array
 		(
 			'mode'               => DataContainer::MODE_SORTED,
-			'fields'             => array('year DESC', 'title ASC'),
+			'fields'             => array('date DESC', 'title ASC'),
 			'panelLayout'        => 'search,filter,limit',
 			'defaultSearchField' => 'title',
 		),
 		'label' => array
 		(
-			'fields' => array('year', 'title'),
-			'format' => '%s – %s',
+			'fields'         => array('date', 'title'),
+			'label_callback' => array('tl_concert', 'listLabel'),
 		),
 		'operations' => array
 		(
@@ -60,7 +60,7 @@ $GLOBALS['TL_DCA']['tl_concert'] = array
 	// Palettes
 	'palettes' => array
 	(
-		'default' => '{title_legend},year,title,alias;{teaser_legend},teaser,description;{image_legend},posterSRC;{events_legend},events;{publish_legend},published',
+		'default' => '{title_legend},date,title,alias;{teaser_legend},teaser,description;{image_legend},posterSRC;{events_legend},events;{publish_legend},published',
 	),
 
 	// Fields
@@ -74,14 +74,12 @@ $GLOBALS['TL_DCA']['tl_concert'] = array
 		(
 			'sql' => "int(10) unsigned NOT NULL default 0",
 		),
-		'year' => array
+		'date' => array
 		(
-			'search'    => true,
-			'filter'    => true,
 			'sorting'   => true,
 			'inputType' => 'text',
-			'eval'      => array('mandatory' => true, 'rgxp' => 'digit', 'maxlength' => 4, 'tl_class' => 'w50'),
-			'sql'       => "smallint(4) unsigned NOT NULL default 0",
+			'eval'      => array('rgxp' => 'date', 'datepicker' => true, 'tl_class' => 'w50 wizard'),
+			'sql'       => "int(10) unsigned NOT NULL default 0",
 		),
 		'title' => array
 		(
@@ -160,7 +158,8 @@ class tl_concert extends Backend
 
 		if (!$varValue)
 		{
-			$varValue = System::getContainer()->get('contao.slug')->generate($dc->activeRecord->year . '-' . $dc->activeRecord->title, [], $aliasExists);
+			$strYear = $dc->activeRecord->date ? date('Y', (int) $dc->activeRecord->date) : '';
+			$varValue = System::getContainer()->get('contao.slug')->generate(trim($strYear . '-' . $dc->activeRecord->title, '-'), [], $aliasExists);
 		}
 		elseif ($aliasExists($varValue))
 		{
@@ -168,6 +167,18 @@ class tl_concert extends Backend
 		}
 
 		return $varValue;
+	}
+
+	/**
+	 * Backend list label: show just the year portion of the full date
+	 * (the DB field stores a real date so sorting/filtering can be exact;
+	 * the label only ever needs the year, matching the front end).
+	 */
+	public function listLabel(array $row): string
+	{
+		$strYear = $row['date'] ? date('Y', (int) $row['date']) : '–';
+
+		return $strYear . ' – ' . $row['title'];
 	}
 
 	/**

@@ -28,7 +28,9 @@ abstract class ModuleConcert extends Module
 		$objTemplate = new FrontendTemplate($this->concert_template ?: ($blnFull ? 'concert_full' : 'concert_latest'));
 		$objTemplate->setData($objConcert->row());
 
-		$objTemplate->year = $objConcert->year;
+		// Templates only ever show the year, even though the field now
+		// stores a full date (needed for correct sorting/filtering).
+		$objTemplate->year = $objConcert->date ? Date::parse('Y', $objConcert->date) : '';
 		$objTemplate->title = $objConcert->title;
 		$objTemplate->hasLink = false;
 

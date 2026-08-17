@@ -10,7 +10,7 @@ use Contao\Model\Collection;
  *
  * @property integer     $id
  * @property integer     $tstamp
- * @property integer     $year
+ * @property integer     $date
  * @property string      $title
  * @property string      $alias
  * @property string|null $teaser
@@ -49,10 +49,15 @@ class ConcertModel extends Model
 	}
 
 	/**
-	 * Find published concerts, newest year first by default.
+	 * Find published concerts, newest date first by default.
 	 *
 	 * @param integer|null $intLimit
 	 * @param integer      $intOffset
+	 * @param array        $arrOptions Set 'excludeFuture' => true to omit
+	 *                                 concerts whose date lies in the future
+	 *                                 (a concert with no date set yet counts
+	 *                                 as not-future, so it stays visible
+	 *                                 until edited rather than disappearing).
 	 *
 	 * @return Collection|ConcertModel[]|ConcertModel|null
 	 */
@@ -60,15 +65,24 @@ class ConcertModel extends Model
 	{
 		$t = static::$strTable;
 		$arrColumns = array();
+		$arrValues = array();
 
 		if (!static::isPreviewMode($arrOptions))
 		{
 			$arrColumns[] = "$t.published=1";
 		}
 
+		if (!empty($arrOptions['excludeFuture']))
+		{
+			$arrColumns[] = "$t.date < ?";
+			$arrValues[] = time();
+		}
+
+		unset($arrOptions['excludeFuture']);
+
 		if (!isset($arrOptions['order']))
 		{
-			$arrOptions['order'] = "$t.year DESC, $t.title ASC";
+			$arrOptions['order'] = "$t.date DESC, $t.title ASC";
 		}
 
 		if ($intLimit)
@@ -86,6 +100,6 @@ class ConcertModel extends Model
 			return static::findAll($arrOptions);
 		}
 
-		return static::findBy($arrColumns, null, $arrOptions);
+		return static::findBy($arrColumns, $arrValues, $arrOptions);
 	}
 }

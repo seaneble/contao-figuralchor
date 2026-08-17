@@ -6,7 +6,7 @@ use Contao\Controller;
 // existing generic tl_module fields (jumpTo, overviewPage, numberOfItems,
 // imgSize, customLabel, cssID, protected) verbatim - only concert_template
 // is new, mirroring tl_module.news_template from contao/news-bundle.
-$GLOBALS['TL_DCA']['tl_module']['palettes']['concertlist']   = '{title_legend},name,headline,type;{config_legend},numberOfItems;{redirect_legend:hide},jumpTo;{template_legend:hide},concert_template,customTpl,imgSize;{protected_legend:hide},protected;{expert_legend:hide},cssID';
+$GLOBALS['TL_DCA']['tl_module']['palettes']['concertlist']   = '{title_legend},name,headline,type;{config_legend},numberOfItems,concert_hideFuture;{redirect_legend:hide},jumpTo;{template_legend:hide},concert_template,customTpl,imgSize;{protected_legend:hide},protected;{expert_legend:hide},cssID';
 $GLOBALS['TL_DCA']['tl_module']['palettes']['concertreader'] = '{title_legend},name,headline,type;{reader_legend:hide},overviewPage,customLabel;{template_legend:hide},concert_template,customTpl,imgSize;{protected_legend:hide},protected;{expert_legend:hide},cssID';
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['concert_template'] = array
@@ -17,4 +17,14 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['concert_template'] = array
 	},
 	'eval'             => array('chosen' => true, 'includeBlankOption' => true, 'tl_class' => 'w50'),
 	'sql'              => "varchar(64) COLLATE ascii_bin NOT NULL default ''",
+);
+
+// concertlist only - there are two instances of this module on the site,
+// and only one (the homepage archive) is meant to hide upcoming concerts;
+// the other still lists everything, so this can't be global behaviour.
+$GLOBALS['TL_DCA']['tl_module']['fields']['concert_hideFuture'] = array
+(
+	'inputType' => 'checkbox',
+	'eval'      => array('tl_class' => 'w50 m12'),
+	'sql'       => array('type' => 'boolean', 'default' => false),
 );
