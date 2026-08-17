@@ -948,7 +948,9 @@ fieldset.checkbox_container label {
 @media (min-width: 64rem) {
     .mod_article:has(> .mod_personalData):has(> .mod_changePassword) {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        /* personalData has far more fields than changePassword - give it
+           the larger share rather than splitting evenly. */
+        grid-template-columns: 3fr 2fr;
         grid-template-rows: auto 1fr;
         grid-auto-flow: column;
         column-gap: var(--size-6);
