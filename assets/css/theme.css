@@ -392,7 +392,8 @@ nav .level_2 {
 
 .mod_navigation a,
 .mod_navigation strong,
-.mod_customnav a {
+.mod_customnav a,
+.mod_customnav strong {
     display: inline-block;
     padding-block: var(--size-2);
     color: inherit;
@@ -538,7 +539,8 @@ nav strong.trail {
     gap: var(--size-2) var(--size-5);
 }
 
-#footer nav.mod_customnav a {
+#footer nav.mod_customnav a,
+#footer nav.mod_customnav strong {
     padding-block: 0;
     color: var(--color-text-muted);
     font-size: var(--font-size-0);
