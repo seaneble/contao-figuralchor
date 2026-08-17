@@ -1231,3 +1231,69 @@ fieldset.checkbox_container label {
 .download-element.ext-jpeg a::after,
 .download-element.ext-png a::after { content: "Bild"; }
 .download-element.ext-mp3 a::after { content: "MP3"; }
+
+
+/* ---------- Print ---------- */
+
+/* Site-wide baseline only - not tuned per page/content type. Goal: any
+   page prints as plain readable black-on-white text with the site chrome
+   stripped out, not a screenshot of the screen layout. */
+@media print {
+    /* Force the OKLCH hue system to plain black-on-white by overriding
+       the tokens it's built from, rather than fighting individual rules -
+       every component already reads color through these custom
+       properties, so this alone covers the whole site. */
+    :root {
+        --color-bg: white;
+        --color-surface: white;
+        --color-text: black;
+        --color-text-muted: #333;
+        --color-border: #999;
+        --color-accent: black;
+        --color-accent-hover: black;
+        --color-accent-contrast: white;
+    }
+
+    /* Chrome that only makes sense on screen: primary/footer nav (and
+       their mobile-toggle machinery), the "back to overview" link, and
+       any submit/interactive-only controls. */
+    #header,
+    #footer,
+    .nav-toggle__button,
+    .nav-toggle__overlay,
+    p.back,
+    button,
+    input[type="submit"],
+    input[type="button"] {
+        display: none !important;
+    }
+
+    a {
+        color: black;
+        text-decoration: underline;
+    }
+
+    /* Expand external links (absolute URLs) so the destination survives
+       onto paper; internal links stay as plain text with no URL suffix -
+       printing this site's own relative paths would be noise, not
+       information. */
+    a[href^="http"]::after {
+        content: " (" attr(href) ")";
+        font-size: 0.8em;
+        color: #333;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        break-after: avoid;
+        color: black;
+    }
+
+    img, table, figure {
+        break-inside: avoid;
+    }
+
+    p, li {
+        orphans: 3;
+        widows: 3;
+    }
+}
