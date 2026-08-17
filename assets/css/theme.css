@@ -819,24 +819,28 @@ fieldset.checkbox_container label {
     background: var(--color-surface);
 }
 
-.mod_listing th.sorted {
-    position: relative;
-    padding-inline-end: var(--size-4);
+/* Arrow sits inline to the LEFT of the header's own text (not absolutely
+   positioned against the cell edge - that pushed the next column's
+   heading away instead of marking this one). Sized in em so it tracks
+   the bold text it sits next to. */
+.mod_listing th.sorted a {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--size-1);
+    font-weight: var(--font-weight-7);
 }
 
 /* Arrow points up for ascending, flipped for descending - both classes
    reflect the CURRENT sort direction (ModuleListing.php's \ var is
    named for the *next* click, but the rendered class matches how the
    list is sorted right now). */
-.mod_listing th.sorted::after {
+.mod_listing th.sorted a::before {
     content: "";
-    position: absolute;
-    inset-inline-end: 0;
-    inset-block-start: 50%;
-    width: var(--size-2);
-    height: var(--size-2);
-    translate: 0 -50%;
-    background-color: var(--color-text-muted);
+    order: -1;
+    flex: none;
+    width: 0.7em;
+    height: 0.7em;
+    background-color: currentColor;
     mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='18 15 12 9 6 15'/%3E%3C/svg%3E");
     mask-repeat: no-repeat;
     mask-position: center;
@@ -847,7 +851,7 @@ fieldset.checkbox_container label {
     -webkit-mask-size: contain;
 }
 
-.mod_listing th.sorted.desc::after {
+.mod_listing th.sorted.desc a::before {
     rotate: 180deg;
 }
 
