@@ -821,7 +821,7 @@ fieldset.checkbox_container label {
 
 .mod_listing th.sorted {
     position: relative;
-    padding-inline-end: var(--size-5);
+    padding-inline-end: var(--size-4);
 }
 
 /* Arrow points up for ascending, flipped for descending - both classes
@@ -833,8 +833,8 @@ fieldset.checkbox_container label {
     position: absolute;
     inset-inline-end: 0;
     inset-block-start: 50%;
-    width: var(--size-3);
-    height: var(--size-3);
+    width: var(--size-2);
+    height: var(--size-2);
     translate: 0 -50%;
     background-color: var(--color-text-muted);
     mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='18 15 12 9 6 15'/%3E%3C/svg%3E");
