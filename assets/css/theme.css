@@ -138,11 +138,11 @@ a.invisible:focus {
  * it up far from where focus actually is. Anchor it to its own nav
  * instead, right above the footer links it skips.
  */
-#footer nav.mod_customnav {
+#footnav {
     position: relative;
 }
 
-#footer nav.mod_customnav a.invisible:focus {
+#footnav a.invisible:focus {
     position: absolute;
     inset-block-start: 0;
     inset-inline-start: 0;
@@ -520,12 +520,12 @@ nav strong.trail {
  * desktop flat-bar layout, regardless of viewport or checkbox state, so
  * the footer is always a simple wrapping row of links.
  */
-#footer .nav-toggle__button,
-#footer .nav-toggle__overlay {
+#footnav .nav-toggle__button,
+#footnav .nav-toggle__overlay {
     display: none;
 }
 
-#footer .nav-toggle {
+#footnav .nav-toggle {
     display: block !important;
     position: static;
     background: none;
@@ -533,14 +533,14 @@ nav strong.trail {
     padding: 0;
 }
 
-#footer nav.mod_customnav ul.level_1 {
+#footnav ul.level_1 {
     display: flex;
     flex-wrap: wrap;
     gap: var(--size-2) var(--size-5);
 }
 
-#footer nav.mod_customnav a,
-#footer nav.mod_customnav strong {
+#footnav a,
+#footnav strong {
     padding-block: 0;
     color: var(--color-text-muted);
     font-size: var(--font-size-0);
