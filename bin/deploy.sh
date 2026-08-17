@@ -20,7 +20,9 @@ cp "$BUNDLE_DIR/assets/css/vendor/open-props.min.css" "$WEBSITE_DIR/files/theme/
 cd "$WEBSITE_DIR"
 
 echo "==> composer update seaneble/contao-figuralchor"
-$COMPOSER update seaneble/contao-figuralchor --no-interaction
+# ~/.composer/auth.json has a stale github-oauth token that breaks any
+# Composer command touching github.com unless isolated from it.
+COMPOSER_HOME=$(mktemp -d) $COMPOSER update seaneble/contao-figuralchor --no-interaction
 
 echo "==> Syncing file index"
 $CONSOLE contao:filesync --no-interaction
