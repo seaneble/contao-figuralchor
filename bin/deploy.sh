@@ -21,8 +21,14 @@ cd "$WEBSITE_DIR"
 
 echo "==> composer update seaneble/contao-figuralchor"
 # ~/.composer/auth.json has a stale github-oauth token that breaks any
-# Composer command touching github.com unless isolated from it.
-COMPOSER_HOME=$(mktemp -d) $COMPOSER update seaneble/contao-figuralchor --no-interaction
+# Composer command touching github.com unless isolated from it. Isolate
+# via a STABLE (not per-run mktemp) COMPOSER_HOME, so its package/repo
+# cache survives across deploys - a fresh temp dir every run defeats the
+# cache and re-fetches everything from the unauthenticated GitHub API,
+# which is rate-limited to 60 req/hour and gets exhausted fast.
+export COMPOSER_HOME="$HOME/.composer-isolated"
+mkdir -p "$COMPOSER_HOME"
+$COMPOSER update seaneble/contao-figuralchor --no-interaction
 
 echo "==> Syncing file index"
 $CONSOLE contao:filesync --no-interaction
