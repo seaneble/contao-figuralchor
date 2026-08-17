@@ -815,6 +815,123 @@ fieldset.checkbox_container label {
     border-block-end: 1px solid var(--color-border);
 }
 
+.mod_listing tbody tr:nth-child(even) {
+    background: var(--color-surface);
+}
+
+.mod_listing th.sorted {
+    position: relative;
+    padding-inline-end: var(--size-5);
+}
+
+/* Arrow points up for ascending, flipped for descending - both classes
+   reflect the CURRENT sort direction (ModuleListing.php's \ var is
+   named for the *next* click, but the rendered class matches how the
+   list is sorted right now). */
+.mod_listing th.sorted::after {
+    content: "";
+    position: absolute;
+    inset-inline-end: 0;
+    inset-block-start: 50%;
+    width: var(--size-3);
+    height: var(--size-3);
+    translate: 0 -50%;
+    background-color: var(--color-text-muted);
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='18 15 12 9 6 15'/%3E%3C/svg%3E");
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: contain;
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='18 15 12 9 6 15'/%3E%3C/svg%3E");
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    -webkit-mask-size: contain;
+}
+
+.mod_listing th.sorted.desc::after {
+    rotate: 180deg;
+}
+
+
+/* ---------- Event detail (event_full_details.html.twig) ---------- */
+
+.event-full__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--size-2) var(--size-5);
+    margin-block-end: var(--size-4);
+    color: var(--color-text-muted);
+}
+
+.event-full__date,
+.event-full__location {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--size-2);
+}
+
+.event-full__date::before,
+.event-full__location::before {
+    content: "";
+    flex: none;
+    width: var(--size-5);
+    height: var(--size-5);
+    background-color: var(--color-accent);
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    -webkit-mask-size: contain;
+}
+
+/* Feather-style calendar outline, same data-URI-mask technique as the
+   download-element icon above. */
+.event-full__date::before {
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'/%3E%3Cline x1='16' y1='2' x2='16' y2='6'/%3E%3Cline x1='8' y1='2' x2='8' y2='6'/%3E%3Cline x1='3' y1='10' x2='21' y2='10'/%3E%3C/svg%3E");
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'/%3E%3Cline x1='16' y1='2' x2='16' y2='6'/%3E%3Cline x1='8' y1='2' x2='8' y2='6'/%3E%3Cline x1='3' y1='10' x2='21' y2='10'/%3E%3C/svg%3E");
+}
+
+/* Feather-style map-pin outline. */
+.event-full__location::before {
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'/%3E%3Ccircle cx='12' cy='10' r='3'/%3E%3C/svg%3E");
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'/%3E%3Ccircle cx='12' cy='10' r='3'/%3E%3C/svg%3E");
+}
+
+.event-full__ics {
+    margin-block-start: var(--size-5);
+}
+
+.event-full__ics-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--size-2);
+    padding: var(--size-2) var(--size-4);
+    border: 1px solid var(--color-border);
+    color: inherit;
+    text-decoration: none;
+}
+
+.event-full__ics-link:hover {
+    background: var(--color-surface);
+    text-decoration: underline;
+}
+
+/* Feather-style tray/download outline. */
+.event-full__ics-link::before {
+    content: "";
+    flex: none;
+    width: var(--size-5);
+    height: var(--size-5);
+    background-color: var(--color-accent);
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'/%3E%3Cpolyline points='7 10 12 15 17 10'/%3E%3Cline x1='12' y1='15' x2='12' y2='3'/%3E%3C/svg%3E");
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: contain;
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'/%3E%3Cpolyline points='7 10 12 15 17 10'/%3E%3Cline x1='12' y1='15' x2='12' y2='3'/%3E%3C/svg%3E");
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    -webkit-mask-size: contain;
+}
 
 /* ---------- Concerts (concert list/reader) ---------- */
 
@@ -864,10 +981,25 @@ fieldset.checkbox_container label {
     border-block-start: 0;
 }
 
+.concert-full__event-link,
+.concert-full__events li {
+    display: flex;
+    align-items: baseline;
+    gap: var(--size-2);
+}
+
+/* .date is a fixed-width column (not the old inline-block + literal
+   text-node space) so the link's default underline no longer stretches
+   across the blank alignment gap before the title. */
 .concert-full__events .date {
-    display: inline-block;
-    min-width: 7rem;
+    flex: none;
+    width: 7rem;
     color: var(--color-text-muted);
+}
+
+/* Some breathing room below the events list before the back link. */
+.mod_concertreader p.back {
+    margin-block-start: var(--size-6);
 }
 
 

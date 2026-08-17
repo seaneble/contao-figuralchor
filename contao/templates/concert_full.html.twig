@@ -27,9 +27,9 @@
             {% for event in events %}
                 <li>
                     {% if event.href %}
-                        <a href="{{ event.href }}"><span class="date">{{ event.date }}</span> {{ event.title }}</a>
+                        <a href="{{ event.href }}" class="concert-full__event-link"><span class="date">{{ event.date }}</span><span class="title">{{ event.title }}</span></a>
                     {% else %}
-                        <span class="date">{{ event.date }}</span> {{ event.title }}
+                        <span class="date">{{ event.date }}</span><span class="title">{{ event.title }}</span>
                     {% endif %}
                 </li>
             {% endfor %}
