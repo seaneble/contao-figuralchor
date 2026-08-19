@@ -511,6 +511,18 @@ nav strong.trail {
     nav .level_1 > li.submenu:focus-within > .level_2 {
         display: flex;
     }
+
+    /* When the current page is itself a submenu's parent item, Contao
+       renders its label as a bare <strong aria-current="page"> instead of
+       an <a> (see the trail/aria-current note above) - no href, nothing
+       for a touch device to tap to trigger :hover/:focus-within above, so
+       the dropdown became unreachable by touch while on that exact page.
+       Skip the interaction requirement entirely here and show its own
+       submenu open by default instead - reasonable anyway, since you're
+       already on that section's landing page. */
+    nav .level_1 > li.submenu.active > .level_2 {
+        display: flex;
+    }
 }
 
 /*
