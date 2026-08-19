@@ -1,0 +1,38 @@
+{#
+ # Override of Contao core's nav_default.html.twig. The only change: the
+ # current page's own label renders as <strong aria-current="page">, not
+ # <a> (there's nowhere to link to - you're already there). When that item
+ # also has a submenu, theme.css only reveals it on :hover/:focus-within -
+ # but a plain <strong> has no href and isn't focusable, so touch devices
+ # have nothing to tap to trigger either, and the dropdown becomes
+ # unreachable while standing on that exact page. Adding tabindex="0"
+ # (only when subitems exist) makes it focusable, so tapping it now
+ # triggers :focus-within the same way tapping a real link triggers
+ # :hover elsewhere in this menu.
+ #}
+<ul class="{{ level }}">
+    {% for item in items %}
+        {% if item.isActive %}
+            <li class="{{ item.class }}"><strong{{ attrs()
+                    .addClass(item.class)
+                    .set('aria-current', 'page')
+                    .set('aria-haspopup', true, item.subitems|default)
+                    .set('tabindex', '0', item.subitems|default)
+                }}>{{ item.link }}</strong>
+                {{- item.subitems|default|raw -}}
+            </li>
+        {% else %}
+            <li{{ attrs().addClass(item.class) }}>
+                <a{{ attrs()
+                    .set('href', item.href)
+                    .addClass(item.class)
+                    .setIfExists('accesskey', item.accesskey|default)
+                    .set('aria-haspopup', true, item.subitems|default)
+                    .mergeWith(item.target|default)
+                    .mergeWith(item.rel|default)
+                }}>{{ item.link }}</a>
+                {{- item.subitems|default|raw -}}
+            </li>
+        {% endif %}
+    {% endfor %}
+</ul>
