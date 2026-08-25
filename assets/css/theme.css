@@ -585,7 +585,57 @@ h6 { font-size: var(--font-size-2); }
 
 p {
     margin-block: 0 var(--size-4);
-    max-width: 70ch;
+}
+
+/* The base reset above (list-style:none, margin/padding:0 on ul/ol) is
+   for the site's own UI lists (nav, sitemap, download lists), which each
+   lay themselves out explicitly and share the ul/ol tag name by
+   coincidence. It has no business reaching into editor-authored content
+   (.rte, Contao's wrapper around rendered rich text) - undo it there so
+   <ul>/<ol>/<table> keep normal browser semantics (bullets, numbering,
+   cell borders) instead of silently losing them. */
+.rte ul,
+.rte ol {
+    margin-block: 0 var(--size-4);
+    padding-inline-start: 1.5em;
+}
+
+.rte ul {
+    list-style: disc;
+}
+
+.rte ol {
+    list-style: decimal;
+}
+
+.rte li {
+    margin-block-end: var(--size-1);
+}
+
+.rte ul ul,
+.rte ol ol,
+.rte ul ol,
+.rte ol ul {
+    margin-block: var(--size-1) 0;
+}
+
+.rte table {
+    width: 100%;
+    margin-block-end: var(--size-4);
+    border-collapse: collapse;
+}
+
+.rte th,
+.rte td {
+    padding: var(--size-2) var(--size-3);
+    text-align: start;
+    vertical-align: top;
+    border: 1px solid var(--color-border);
+}
+
+.rte th {
+    background: var(--color-surface);
+    font-weight: var(--font-weight-6);
 }
 
 /* Quote block: surface + accent left border (echoes the download boxes)
