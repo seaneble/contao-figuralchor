@@ -1028,11 +1028,16 @@ fieldset.checkbox_container label {
     gap: var(--size-4);
 }
 
+/* align-items:flex-start (not the default stretch): posters keep their
+   own natural, un-cropped aspect ratio (only their width is fixed, via
+   the Contao image size), so tiles in the same wrapped row are free to
+   end up different heights - forcing them to match would either crop or
+   letterbox them, which is exactly what we're avoiding. */
 @media (min-width: 48rem) {
     .concert-grid {
         flex-direction: row;
         flex-wrap: wrap;
-        align-items: stretch;
+        align-items: flex-start;
     }
 
     .concert-tile {
@@ -1041,29 +1046,32 @@ fieldset.checkbox_container label {
 
     .concert-grid__year {
         flex: 0 0 4rem;
+        align-self: stretch; /* still spans the full row height, unlike the posters either side of it */
     }
 }
 
-/* Aspect ratio matches the Contao image size set up in the backend under
-   Layout > Image sizes for this module (600x840px, crop, 5:7 - see the
-   "Konzertliste" module's "Bildgröße" field). object-fit:cover as a
-   defensive fallback for any poster not yet run through that size. */
+/* No separate "box" around the poster and no cropping - the tile IS the
+   poster image at its own natural aspect ratio (only its width is fixed,
+   via the Contao image size). That also means .concert-tile__overlay
+   below (position:absolute; inset:0) is automatically scoped to exactly
+   the poster's own rendered area, nothing more. */
 .concert-tile {
     position: relative;
-    aspect-ratio: 5 / 7;
-    overflow: hidden;
-    background: var(--color-surface);
     clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, 0 100%);
 }
 
 .concert-tile__poster,
 .concert-tile__poster img {
+    display: block;
     width: 100%;
-    height: 100%;
 }
 
-.concert-tile__poster img {
-    object-fit: cover;
+/* Edge case only: a concert with no poster uploaded has nothing to give
+   .concert-tile a size (the overlay is position:absolute, so it doesn't
+   contribute to layout) - give it a plain neutral placeholder box. */
+.concert-tile--no-image {
+    min-height: 12rem;
+    background: var(--color-surface);
 }
 
 /* Title/teaser stay in the DOM unconditionally (screen readers always get
