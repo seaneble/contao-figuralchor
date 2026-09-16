@@ -33,7 +33,6 @@ $GLOBALS['TL_DCA']['tl_concert'] = array
 		(
 			'mode'               => DataContainer::MODE_SORTED,
 			'fields'             => array('date', 'title'),
-			'flag'               => DataContainer::SORT_YEAR_DESC,
 			'panelLayout'        => 'search,filter,limit',
 			'defaultSearchField' => 'title',
 		),
@@ -78,6 +77,7 @@ $GLOBALS['TL_DCA']['tl_concert'] = array
 		'date' => array
 		(
 			'sorting'   => true,
+			'flag'      => DataContainer::SORT_YEAR_DESC,
 			'inputType' => 'text',
 			'eval'      => array('rgxp' => 'date', 'datepicker' => true, 'tl_class' => 'w50 wizard'),
 			'sql'       => "int(10) unsigned NOT NULL default 0",
