@@ -32,7 +32,8 @@ $GLOBALS['TL_DCA']['tl_concert'] = array
 		'sorting' => array
 		(
 			'mode'               => DataContainer::MODE_SORTED,
-			'fields'             => array('date DESC', 'title ASC'),
+			'fields'             => array('date', 'title'),
+			'flag'               => DataContainer::SORT_YEAR_DESC,
 			'panelLayout'        => 'search,filter,limit',
 			'defaultSearchField' => 'title',
 		),
@@ -170,15 +171,14 @@ class tl_concert extends Backend
 	}
 
 	/**
-	 * Backend list label: show just the year portion of the full date
-	 * (the DB field stores a real date so sorting/filtering can be exact;
-	 * the label only ever needs the year, matching the front end).
+	 * Backend list label: show the full date (the list is already grouped
+	 * by year via list.sorting.flag, so the row itself needs the full date).
 	 */
 	public function listLabel(array $row): string
 	{
-		$strYear = $row['date'] ? date('Y', (int) $row['date']) : '–';
+		$strDate = $row['date'] ? Date::parse(Config::get('dateFormat'), (int) $row['date']) : '–';
 
-		return $strYear . ' – ' . $row['title'];
+		return $strDate . ' – ' . $row['title'];
 	}
 
 	/**
