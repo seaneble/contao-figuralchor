@@ -3,6 +3,11 @@
 {% block head %}
     {{ parent() }}
     <style>:root{--theme-hue:{{ figuralchor_theme_hue() }}}</style>
+    <link rel="icon" href="/files/theme/favicon/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/files/theme/favicon/favicon.ico" sizes="any">
+    <link rel="apple-touch-icon" href="/files/theme/favicon/apple-touch-icon.png">
+    <link rel="manifest" href="/files/theme/favicon/site.webmanifest">
+    <meta name="theme-color" content="#000000">
 {% endblock %}
 
 {% block body_content %}

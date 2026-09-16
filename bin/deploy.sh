@@ -17,6 +17,10 @@ echo "==> Syncing theme CSS into files/theme/"
 cp "$BUNDLE_DIR/assets/css/theme.css" "$WEBSITE_DIR/files/theme/theme.css"
 cp "$BUNDLE_DIR/assets/css/vendor/open-props.min.css" "$WEBSITE_DIR/files/theme/open-props.min.css"
 
+echo "==> Syncing favicon assets into files/theme/favicon/"
+mkdir -p "$WEBSITE_DIR/files/theme/favicon"
+cp "$BUNDLE_DIR"/assets/favicon/* "$WEBSITE_DIR/files/theme/favicon/"
+
 cd "$WEBSITE_DIR"
 
 echo "==> composer update seaneble/contao-figuralchor"
