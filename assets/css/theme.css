@@ -1084,7 +1084,7 @@ fieldset.checkbox_container label {
     padding: var(--size-4);
     text-align: center;
     color: var(--color-accent-contrast);
-    background: color-mix(in oklch, var(--color-text) 70%, transparent);
+    background: color-mix(in oklch, var(--color-text) 85%, transparent);
     opacity: 0;
     transition: opacity 0.2s ease;
 }
