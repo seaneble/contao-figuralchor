@@ -1010,22 +1010,130 @@ fieldset.checkbox_container label {
 
 /* ---------- Concerts (concert list/reader) ---------- */
 
-/* concert_short.html.twig - deliberately plain, matching the existing
-   article-teaser look (mod_article.html.twig's "alias" block) rather than
-   a boxed card - no background/border here on purpose. Poster is unsized
-   for now (max-width only) - proper responsive sizing via imgSize is a
-   follow-up. */
-.concert-item__poster img {
-    display: block;
-    max-width: 16rem;
-    height: auto;
-    margin-block-end: var(--size-3);
+/* Poster tile grid - concert_short.html.twig items inside
+   mod_concertlist_grid.html.twig's .concert-grid wrapper (the "Konzerte"
+   page listing only; the homepage teaser box uses the plain
+   mod_concertlist.html.twig/concert_latest.html.twig pair instead and is
+   untouched by any of this). */
+.concert-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--size-4);
 }
 
-.concert-item__meta {
+@media (min-width: 48rem) {
+    .concert-grid {
+        grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    }
+}
+
+/* Aspect ratio matches the Contao image size set up in the backend under
+   Layout > Image sizes for this module (600x840px, crop, 5:7 - see the
+   "Konzertliste" module's "Bildgröße" field). object-fit:cover as a
+   defensive fallback for any poster not yet run through that size. */
+.concert-tile {
+    position: relative;
+    aspect-ratio: 5 / 7;
+    overflow: hidden;
+    background: var(--color-surface);
+    clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, 0 100%);
+}
+
+.concert-tile__poster,
+.concert-tile__poster img {
+    width: 100%;
+    height: 100%;
+}
+
+.concert-tile__poster img {
+    object-fit: cover;
+}
+
+/* Title/teaser stay in the DOM unconditionally (screen readers always get
+   them) and are only visually revealed via opacity - :hover for mouse,
+   :focus-within because .concert-tile__link below is a real focusable
+   element (same :hover/:focus-within pairing already used for the nav's
+   submenu reveal). concert-tile--no-image keeps it permanently visible -
+   there's no poster to hover over in that case. */
+.concert-tile__overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--size-2);
+    padding: var(--size-4);
+    text-align: center;
+    color: var(--color-accent-contrast);
+    background: color-mix(in oklch, var(--color-text) 70%, transparent);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.concert-tile:hover .concert-tile__overlay,
+.concert-tile:focus-within .concert-tile__overlay,
+.concert-tile--no-image .concert-tile__overlay {
+    opacity: 1;
+}
+
+.concert-tile__title {
+    margin: 0;
+    font-size: var(--font-size-3);
+    font-weight: var(--font-weight-7);
+}
+
+.concert-tile__teaser {
     margin: 0;
     font-size: var(--font-size-0);
-    color: var(--color-text-muted);
+}
+
+/* "Stretched link" - covers the whole tile (poster + overlay) so both are
+   clickable, rather than just a small "read more" link. */
+.concert-tile__link {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+}
+
+/* Year-stripe tile: sits in the same grid track as a poster tile (so
+   auto-fill's column math stays uniform) but reads as a narrow vertical
+   accent bar centered within that track, echoing the poster tiles' own
+   corner cut. Below --bp-nav the grid is a single stacked column, where a
+   "narrow vertical stripe" is meaningless - the bar becomes a full-width
+   horizontal divider heading instead. */
+.concert-grid__year {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 6rem;
+}
+
+.concert-grid__year span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 4rem;
+    height: 100%;
+    min-height: 6rem;
+    background: var(--color-accent);
+    color: var(--color-accent-contrast);
+    font-size: var(--font-size-3);
+    font-weight: var(--font-weight-7);
+    letter-spacing: 0.05em;
+    clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, 0 100%);
+}
+
+@media (min-width: 48rem) {
+    .concert-grid__year {
+        height: 100%;
+    }
+
+    .concert-grid__year span {
+        writing-mode: vertical-rl;
+        transform: rotate(180deg);
+    }
 }
 
 /* concert_full.html.twig - the reader */

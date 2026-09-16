@@ -3,6 +3,7 @@
 namespace Figuralchor\ContaoBundle\Module;
 
 use Contao\BackendTemplate;
+use Contao\Date;
 use Contao\PageModel;
 use Contao\StringUtil;
 use Contao\System;
@@ -59,7 +60,10 @@ class ModuleConcertList extends ModuleConcert
 
 		foreach ($objConcerts as $objConcert)
 		{
-			$arrArticles[] = $this->parseArticle($objConcert, $objJumpTo);
+			$arrArticles[] = array(
+				'year' => $objConcert->date ? Date::parse('Y', $objConcert->date) : '',
+				'html' => $this->parseArticle($objConcert, $objJumpTo),
+			);
 		}
 
 		$this->Template->articles = $arrArticles;

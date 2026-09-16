@@ -4,6 +4,6 @@
     {% if not articles %}
         <p class="empty">{{ empty }}</p>
     {% else %}
-        {{ articles|join|raw }}
+        {% for article in articles %}{{ article.html|raw }}{% endfor %}
     {% endif %}
 {% endblock %}

@@ -1,0 +1,27 @@
+{#
+    Poster tile grid variant of mod_concertlist.html.twig, used only via
+    this module instance's "customTpl" (the "Konzerte" page listing) - the
+    default mod_concertlist.html.twig (used by the homepage teaser box)
+    stays a plain concatenated list. Inserts a narrow year-stripe tile
+    (concert-grid__year) into the grid flow whenever the year changes.
+    {% set %} inside a for-loop doesn't persist across iterations in Twig,
+    hence the namespace() for tracking the previous year.
+#}
+{% extends '@Contao/block_unsearchable.html.twig' %}
+
+{% block content %}
+    {% if not articles %}
+        <p class="empty">{{ empty }}</p>
+    {% else %}
+        <div class="concert-grid">
+            {% set ns = namespace(year = null) %}
+            {% for article in articles %}
+                {% if article.year != ns.year %}
+                    {% set ns.year = article.year %}
+                    <div class="concert-grid__year"><span>{{ article.year }}</span></div>
+                {% endif %}
+                {{ article.html|raw }}
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}
