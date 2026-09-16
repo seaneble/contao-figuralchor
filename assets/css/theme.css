@@ -1015,15 +1015,32 @@ fieldset.checkbox_container label {
    page listing only; the homepage teaser box uses the plain
    mod_concertlist.html.twig/concert_latest.html.twig pair instead and is
    untouched by any of this). */
+/* Flexbox, not grid: a CSS Grid repeat() track is necessarily the same
+   width for every item that lands in it, which would force the narrow
+   year-stripe (see .concert-grid__year below) into a full poster-width
+   column with the stripe centered in a lot of dead space either side of
+   it - tried that first, looked wrong live. Flexbox lets the stripe
+   simply have a smaller flex-basis than the poster tiles in the same
+   wrapped row, with no leftover gap. */
 .concert-grid {
-    display: grid;
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
     gap: var(--size-4);
 }
 
 @media (min-width: 48rem) {
     .concert-grid {
-        grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: stretch;
+    }
+
+    .concert-tile {
+        flex: 1 1 16rem;
+    }
+
+    .concert-grid__year {
+        flex: 0 0 4rem;
     }
 }
 
@@ -1097,39 +1114,29 @@ fieldset.checkbox_container label {
     z-index: 2;
 }
 
-/* Year-stripe tile: sits in the same grid track as a poster tile (so
-   auto-fill's column math stays uniform) but reads as a narrow vertical
-   accent bar centered within that track, echoing the poster tiles' own
-   corner cut. Below --bp-nav the grid is a single stacked column, where a
-   "narrow vertical stripe" is meaningless - the bar becomes a full-width
-   horizontal divider heading instead. */
+/* Year-stripe tile: a genuinely narrow flex item (flex-basis 4rem, see
+   above) standing among the poster tiles, stretched by the flex row to
+   match their height, echoing the poster tiles' own corner cut. Below
+   --bp-nav the grid is a single stacked column, where a "narrow vertical
+   stripe" is meaningless - it becomes a full-width horizontal divider
+   heading instead (min-height only, no stretch source to fill there). */
 .concert-grid__year {
     display: flex;
     align-items: center;
     justify-content: center;
     min-height: 6rem;
-}
-
-.concert-grid__year span {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 4rem;
-    height: 100%;
-    min-height: 6rem;
     background: var(--color-accent);
     color: var(--color-accent-contrast);
-    font-size: var(--font-size-3);
-    font-weight: var(--font-weight-7);
-    letter-spacing: 0.05em;
     clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, 0 100%);
 }
 
-@media (min-width: 48rem) {
-    .concert-grid__year {
-        height: 100%;
-    }
+.concert-grid__year span {
+    font-size: var(--font-size-3);
+    font-weight: var(--font-weight-7);
+    letter-spacing: 0.05em;
+}
 
+@media (min-width: 48rem) {
     .concert-grid__year span {
         writing-mode: vertical-rl;
         transform: rotate(180deg);
