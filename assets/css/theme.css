@@ -1119,13 +1119,16 @@ fieldset.checkbox_container label {
    match their height, echoing the poster tiles' own corner cut. Below
    --bp-nav the grid is a single stacked column, where a "narrow vertical
    stripe" is meaningless - it becomes a full-width horizontal divider
-   heading instead (min-height only, no stretch source to fill there). */
+   heading instead (min-height only, no stretch source to fill there).
+   Deliberately --color-text (neutral near-black), not --color-accent -
+   the posters themselves are colorful artwork, so a saturated accent bar
+   between them competes rather than just marking a boundary. */
 .concert-grid__year {
     display: flex;
     align-items: center;
     justify-content: center;
     min-height: 6rem;
-    background: var(--color-accent);
+    background: var(--color-text);
     color: var(--color-accent-contrast);
     clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, 0 100%);
 }
