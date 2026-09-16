@@ -6,11 +6,19 @@
     and are only visually revealed on hover/focus via CSS opacity, so
     screen readers get them regardless of hover state. Year isn't shown
     here - the grid's own year-stripe tiles carry that.
+
+    @Contao/image.html.twig wraps its <picture> in its own <a> whenever an
+    ambient `href` is in scope (see contao/core-bundle's image.html.twig:
+    "{% if imageHref|default or href|default %}") - `href` is exactly the
+    variable parseArticle() sets for the "read more" link, so without the
+    {href: null} override below this would nest that link inside
+    .concert-tile__link (invalid HTML, and the outer link already covers
+    the poster anyway).
 #}
 <div class="concert-tile{% if not addImage %} concert-tile--no-image{% endif %}">
     {% if addImage %}
         <div class="concert-tile__poster">
-            {{ include('@Contao/image.html.twig') }}
+            {{ include('@Contao/image.html.twig', {href: null}) }}
         </div>
     {% endif %}
     <div class="concert-tile__overlay">
