@@ -4,8 +4,10 @@
     default mod_concertlist.html.twig (used by the homepage teaser box)
     stays a plain concatenated list. Inserts a narrow year-stripe tile
     (concert-grid__year) into the grid flow whenever the year changes.
-    {% set %} inside a for-loop doesn't persist across iterations in Twig,
-    hence the namespace() for tracking the previous year.
+    Contao renders bundle templates through a sandboxed Twig environment
+    that doesn't allow namespace() (the usual way to track a value across
+    for-loop iterations) - comparing against the previous array item by
+    index instead avoids needing any loop-persistent state.
 #}
 {% extends '@Contao/block_unsearchable.html.twig' %}
 
@@ -14,10 +16,8 @@
         <p class="empty">{{ empty }}</p>
     {% else %}
         <div class="concert-grid">
-            {% set ns = namespace(year = null) %}
             {% for article in articles %}
-                {% if article.year != ns.year %}
-                    {% set ns.year = article.year %}
+                {% if loop.first or article.year != articles[loop.index0 - 1].year %}
                     <div class="concert-grid__year"><span>{{ article.year }}</span></div>
                 {% endif %}
                 {{ article.html|raw }}
