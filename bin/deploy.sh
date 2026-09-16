@@ -20,6 +20,10 @@ cp "$BUNDLE_DIR/assets/css/vendor/open-props.min.css" "$WEBSITE_DIR/files/theme/
 echo "==> Syncing favicon assets into files/theme/favicon/"
 mkdir -p "$WEBSITE_DIR/files/theme/favicon"
 cp "$BUNDLE_DIR"/assets/favicon/* "$WEBSITE_DIR/files/theme/favicon/"
+# .public marks the folder for a public/files symlink (Contao's file-manager
+# "public" flag); without it composer's contao-setup step won't expose the
+# folder under public/files and every /files/theme/favicon/* URL 404s.
+touch "$WEBSITE_DIR/files/theme/favicon/.public"
 
 cd "$WEBSITE_DIR"
 
